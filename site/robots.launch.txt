@@ -1,0 +1,24 @@
+# quietmason.com - launch mode (indexable)
+User-agent: *
+Allow: /
+Disallow: /*?fx=
+Sitemap: https://quietmason.com/sitemap.xml
+
+# Answer engines are welcome: we want to be quoted, not hidden.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# The hidden motion panel stays out of the index even if it gets linked.
+Disallow: /?fx=1
