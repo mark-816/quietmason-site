@@ -68,13 +68,12 @@
   var token = new URLSearchParams(location.search).get('t') || localStorage.getItem('qm_admin_token') || '';
   if (new URLSearchParams(location.search).get('t')) localStorage.setItem('qm_admin_token', token);
 
-  function rows(el, items, label) {
+  function rows(el, items) {
     if (!items || !items.length) { el.innerHTML = '<tr><td colspan="2" class="muted">nothing yet</td></tr>'; return; }
     var max = items[0].n || 1;
     el.innerHTML = items.map(function (r) {
-      var name = r.k === undefined ? r[label] : r.k;
       var w = Math.max(2, Math.round(100 * r.n / max));
-      return '<tr><td>' + esc(name) + '<div class="bar" style="width:' + w + '%"></div></td><td>' + r.n + '</td></tr>';
+      return '<tr><td>' + esc(r.k) + '<div class="bar" style="width:' + w + '%"></div></td><td>' + r.n + '</td></tr>';
     }).join('');
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }

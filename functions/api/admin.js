@@ -30,10 +30,10 @@ export async function onRequestGet({ request, env }) {
   const [today, week, pages, refs, countries, kinds, recentChats, leadRows, botRows] = await Promise.all([
     q("SELECT COUNT(*) pv, COUNT(DISTINCT ip) uv FROM events WHERE date(created_at,'+8 hours') = date('now','+8 hours')"),
     q("SELECT COUNT(*) pv, COUNT(DISTINCT ip) uv FROM events WHERE created_at >= datetime('now','-7 days')"),
-    q("SELECT page, COUNT(*) n FROM events WHERE event='pageview' AND created_at >= datetime('now','-7 days') GROUP BY page ORDER BY n DESC LIMIT 20"),
-    q("SELECT COALESCE(NULLIF(ref,''),'direct') r, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY r ORDER BY n DESC LIMIT 12"),
-    q("SELECT COALESCE(NULLIF(country,''),'?') c, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY c ORDER BY n DESC LIMIT 12"),
-    q("SELECT event, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY event ORDER BY n DESC"),
+    q("SELECT page AS k, COUNT(*) n FROM events WHERE event='pageview' AND created_at >= datetime('now','-7 days') GROUP BY page ORDER BY n DESC LIMIT 20"),
+    q("SELECT COALESCE(NULLIF(ref,''),'direct') AS k, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY k ORDER BY n DESC LIMIT 12"),
+    q("SELECT COALESCE(NULLIF(country,''),'?') AS k, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY k ORDER BY n DESC LIMIT 12"),
+    q("SELECT event AS k, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY k ORDER BY n DESC"),
     q("SELECT created_at, ip, msg, reply, layer FROM chat_logs ORDER BY id DESC LIMIT 25"),
     q("SELECT created_at, email, topic, source FROM leads ORDER BY id DESC LIMIT 25"),
     q("SELECT bot, COUNT(*) n FROM bot_visits WHERE created_at >= datetime('now','-7 days') GROUP BY bot ORDER BY n DESC LIMIT 10")
