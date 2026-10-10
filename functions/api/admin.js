@@ -27,7 +27,7 @@ export async function onRequestGet({ request, env }) {
   }
 
   const q = async (sql) => (await env.DB.prepare(sql).all()).results || [];
-  const [today, week, pages, refs, countries, kinds, recentChats, leadRows, botRows] = await Promise.all([
+  const [today, week, pages, refs, countries, kinds, recentChats, leadRows, botRows, daily, landing, queue] = await Promise.all([
     q("SELECT COUNT(*) pv, COUNT(DISTINCT ip) uv FROM events WHERE date(created_at,'+8 hours') = date('now','+8 hours')"),
     q("SELECT COUNT(*) pv, COUNT(DISTINCT ip) uv FROM events WHERE created_at >= datetime('now','-7 days')"),
     q("SELECT page AS k, COUNT(*) n FROM events WHERE event='pageview' AND created_at >= datetime('now','-7 days') GROUP BY page ORDER BY n DESC LIMIT 20"),
@@ -36,7 +36,18 @@ export async function onRequestGet({ request, env }) {
     q("SELECT event AS k, COUNT(*) n FROM events WHERE created_at >= datetime('now','-7 days') GROUP BY k ORDER BY n DESC"),
     q("SELECT created_at, ip, msg, reply, layer FROM chat_logs ORDER BY id DESC LIMIT 25"),
     q("SELECT created_at, email, topic, source FROM leads ORDER BY id DESC LIMIT 25"),
-    q("SELECT bot, COUNT(*) n FROM bot_visits WHERE created_at >= datetime('now','-7 days') GROUP BY bot ORDER BY n DESC LIMIT 10")
+    q("SELECT bot, COUNT(*) n FROM bot_visits WHERE created_at >= datetime('now','-7 days') GROUP BY bot ORDER BY n DESC LIMIT 10"),
+    // daily series, UTC+8, 30 days (zero-filled below; the dashboard slices to 7/14/30)
+    q("SELECT date(created_at,'+8 hours') AS d, COUNT(*) pv, COUNT(DISTINCT ip) uv FROM events " +
+      "WHERE created_at >= datetime('now','-30 days') GROUP BY d ORDER BY d"),
+    // sources -> the first page that visitor saw (bare columns + MIN pick that row in SQLite)
+    q("SELECT ref AS source, page, COUNT(*) n FROM (" +
+      "  SELECT ref, page, ip, MIN(created_at) t FROM events " +
+      "  WHERE event='pageview' AND created_at >= datetime('now','-7 days') GROUP BY ref, ip" +
+      ") GROUP BY source, page ORDER BY n DESC LIMIT 20"),
+    // anything the rules layer could not answer is waiting for a person
+    q("SELECT created_at, ip, msg, layer FROM chat_logs " +
+      "WHERE layer IS NULL OR layer <> 'rule' ORDER BY id DESC LIMIT 25")
   ]);
   return json({
     ok: true, source: 'd1',
@@ -45,8 +56,23 @@ export async function onRequestGet({ request, env }) {
     pages, referrers: refs, countries, kinds,
     chats: { total: recentChats.length, recent: recentChats },
     leads: { total: leadRows.length, recent: leadRows },
-    bots: botRows
+    bots: botRows,
+    daily: fillDays(daily, 30),
+    landing,
+    queue
   });
+}
+
+/* the series must be continuous: gaps are real zeros, not missing days */
+function fillDays(rows, n) {
+  const have = new Map((rows || []).map((r) => [String(r.d).slice(0, 10), r]));
+  const out = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const day = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    const r = have.get(day);
+    out.push({ d: day, pv: r ? Number(r.pv) : 0, uv: r ? Number(r.uv) : 0 });
+  }
+  return out;
 }
 
 async function kvAll(ns) {
@@ -66,6 +92,51 @@ async function kvAll(ns) {
   } catch (e) {
     return [];
   }
+}
+
+/* same shapes as the D1 path, so the dashboard never has to care where the data came from */
+function dayKey(t) {
+  return new Date(typeof t === 'number' ? t : Date.parse(t) || Date.now()).toISOString().slice(0, 10);
+}
+
+function dailySeries(events, n) {
+  const byDay = new Map();
+  for (const e of events) {
+    const d = dayKey(e.created_at || e._at);
+    const cur = byDay.get(d) || { pv: 0, ips: new Set() };
+    cur.pv += 1;
+    if (e.ip) cur.ips.add(e.ip);
+    byDay.set(d, cur);
+  }
+  const out = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    const cur = byDay.get(d);
+    out.push({ d, pv: cur ? cur.pv : 0, uv: cur ? cur.ips.size : 0 });
+  }
+  return out;
+}
+
+function landingPages(events, days = 7) {
+  const since = Date.now() - days * 86400000;
+  const first = new Map();
+  for (const e of events) {
+    if ((e.event || 'pageview') !== 'pageview') continue;
+    const t = Date.parse(e.created_at || e._at || 0);
+    if (!(t >= since)) continue;
+    const key = String(e.ref || '') + '\u0000' + String(e.ip || '');
+    const prev = first.get(key);
+    if (!prev || t < prev.t) first.set(key, { t, page: e.page, ref: e.ref || '' });
+  }
+  const counts = new Map();
+  for (const v of first.values()) {
+    const key = (v.ref || '(direct)') + '\u0000' + (v.page || '(unknown)');
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(([k, n]) => { const [source, page] = k.split('\u0000'); return { source, page, n }; });
 }
 
 function aggregate(events, chats, leads) {
@@ -92,7 +163,10 @@ function aggregate(events, chats, leads) {
     kinds: top(recent, (e) => e.event || 'pageview'),
     chats: { total: chats.length, recent: chats.slice(-25).reverse() },
     leads: { total: leads.length, recent: leads.slice(-25).reverse() },
-    bots: []
+    bots: [],
+    daily: dailySeries(events, 14),
+    landing: landingPages(events),
+    queue: chats.filter((c) => c.layer && c.layer !== 'rule').slice(-25).reverse()
   };
 }
 

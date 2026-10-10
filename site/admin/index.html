@@ -30,6 +30,16 @@
   .log div{padding:6px 0;border-bottom:1px solid var(--line-2)}
   .muted{color:var(--ink-3);font-size:13px}
   .empty{padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--ink-3);font-size:14px}
+  #chart svg{width:100%;height:auto;display:block}
+  #chart text{font-family:var(--mono);font-size:10px;fill:var(--ink-3)}
+  #chart .bar{fill:var(--accent);opacity:.55}
+  #chart .bar:hover{opacity:.85}
+  #chart .line{fill:none;stroke:#1d7a52;stroke-width:2}
+  #chart .dot{fill:#1d7a52}
+  #chart .grid{stroke:var(--line-2);stroke-width:1}
+  .rng{cursor:pointer}
+  .rng[aria-pressed="true"]{color:var(--ink);border-color:var(--ink-3);background:var(--bg-2)}
+  table.land td:nth-child(2){color:var(--ink-3)}
 </style>
 </head>
 <body>
@@ -50,11 +60,27 @@
     <div class="tile"><b id="l-n">–</b><span>inquiries</span></div>
   </div>
 
+  <div class="panel" style="margin-bottom:18px">
+    <h2 style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">Traffic by day
+      <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-3)" id="range-note">buckets use UTC+8</span>
+      <span style="margin-left:auto;display:flex;gap:6px">
+        <button class="badge rng" data-n="7" aria-pressed="false">7d</button>
+        <button class="badge rng" data-n="14" aria-pressed="true">14d</button>
+        <button class="badge rng" data-n="30" aria-pressed="false">30d</button>
+      </span>
+    </h2>
+    <div id="chart"></div>
+    <div class="muted" style="margin-top:8px"><span style="display:inline-block;width:10px;height:10px;background:var(--accent);opacity:.55;border-radius:2px"></span> pageviews
+      &nbsp;&nbsp;<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#1d7a52"></span> visitors</div>
+  </div>
+
   <div class="cols">
     <div class="panel"><h2>Pages (7 days)</h2><table class="mini" id="pages"></table></div>
     <div class="panel"><h2>Sources (7 days)</h2><table class="mini" id="refs"></table></div>
     <div class="panel"><h2>Countries (7 days)</h2><table class="mini" id="countries"></table></div>
     <div class="panel"><h2>Events (7 days)</h2><table class="mini" id="kinds"></table></div>
+    <div class="panel"><h2>Where visitors landed</h2><table class="mini land" id="landing"></table></div>
+    <div class="panel"><h2>Waiting for a person</h2><div class="log" id="queue"></div></div>
     <div class="panel"><h2>Recent inquiries</h2><div class="log" id="leads"></div></div>
     <div class="panel"><h2>Recent chat</h2><div class="log" id="chats"></div></div>
   </div>
@@ -77,6 +103,61 @@
     }).join('');
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+
+  var series = [], range = 14;
+  var W = 720, H = 190, M = { l: 38, r: 10, t: 14, b: 24 };
+
+  function niceMax(v) {
+    if (v <= 5) return 5;
+    var step = Math.pow(10, Math.floor(Math.log10(v))) / 2;
+    return Math.ceil(v / step) * step;
+  }
+
+  function drawChart() {
+    var host = document.getElementById('chart');
+    var data = series.slice(-range);
+    if (!data.length || data.every(function (x) { return !x.pv; })) {
+      host.innerHTML = '<div class="empty">no traffic recorded in this window yet</div>';
+      return;
+    }
+    var iw = W - M.l - M.r, ih = H - M.t - M.b;
+    var max = niceMax(Math.max.apply(null, data.map(function (x) { return x.pv; })));
+    var slot = iw / data.length, bw = Math.max(3, Math.min(26, slot * 0.5));
+    var y = function (v) { return M.t + ih - (v / max) * ih; };
+    var parts = [];
+
+    for (var g = 0; g <= 2; g++) {
+      var val = Math.round(max * g / 2), yy = y(val);
+      parts.push('<line class="grid" x1="' + M.l + '" x2="' + (W - M.r) + '" y1="' + yy + '" y2="' + yy + '"/>');
+      parts.push('<text x="' + (M.l - 6) + '" y="' + (yy + 3) + '" text-anchor="end">' + val + '</text>');
+    }
+    data.forEach(function (d, i) {
+      var cx = M.l + slot * i + slot / 2;
+      var tip = d.d + ': ' + d.pv + ' pageviews, ' + d.uv + ' visitors';
+      parts.push('<rect class="bar" x="' + (cx - bw / 2) + '" y="' + y(d.pv) + '" width="' + bw + '" height="' + (M.t + ih - y(d.pv)) + '" rx="2"><title>' + esc(tip) + '</title></rect>');
+      var every = data.length > 20 ? 5 : (data.length > 10 ? 3 : 2);
+      if (i % every === 0 || i === data.length - 1) {
+        parts.push('<text x="' + cx + '" y="' + (H - 8) + '" text-anchor="middle">' + d.d.slice(5) + '</text>');
+      }
+    });
+    var pts = data.map(function (d, i) { return (M.l + slot * i + slot / 2) + ',' + y(d.uv); }).join(' ');
+    parts.push('<polyline class="line" points="' + pts + '"/>');
+    data.forEach(function (d, i) {
+      var cx = M.l + slot * i + slot / 2;
+      parts.push('<circle class="dot" cx="' + cx + '" cy="' + y(d.uv) + '" r="2.4"><title>' + esc(d.d + ': ' + d.uv + ' visitors') + '</title></circle>');
+    });
+    host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="pageviews and visitors per day, last ' + data.length + ' days">' + parts.join('') + '</svg>';
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.rng'), function (btn) {
+    btn.addEventListener('click', function () {
+      range = parseInt(btn.dataset.n, 10);
+      Array.prototype.forEach.call(document.querySelectorAll('.rng'), function (b) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      drawChart();
+    });
+  });
 
   function load() {
     document.getElementById('src').textContent = 'loading…';
@@ -104,6 +185,18 @@
         rows(document.getElementById('refs'), d.referrers);
         rows(document.getElementById('countries'), d.countries);
         rows(document.getElementById('kinds'), d.kinds);
+        series = d.daily || [];
+        drawChart();
+        var LD = document.getElementById('landing');
+        LD.innerHTML = (d.landing && d.landing.length)
+          ? d.landing.slice(0, 12).map(function (x) {
+              return '<tr><td>' + esc(x.source || '(direct)') + '<div class="bar" style="width:' + Math.max(2, Math.round(100 * x.n / d.landing[0].n)) + '%"></div></td><td>' + esc(x.page) + ' · ' + x.n + '</td></tr>';
+            }).join('')
+          : '<tr><td colspan="2" class="muted">nothing yet</td></tr>';
+        var Q = document.getElementById('queue');
+        Q.innerHTML = (d.queue && d.queue.length)
+          ? d.queue.map(function (x) { return '<div>' + esc(x.created_at) + ' · <b>' + esc(x.layer || 'unanswered') + '</b> ' + esc(String(x.msg || '').slice(0, 100)) + '</div>'; }).join('')
+          : '<div class="empty">nothing waiting — the rules layer answered everything</div>';
         var L = document.getElementById('leads');
         L.innerHTML = (d.leads.recent && d.leads.recent.length)
           ? d.leads.recent.map(function (x) { return '<div>' + esc(x.created_at) + ' · ' + esc(x.email) + ' · ' + esc(x.topic || '') + '</div>'; }).join('')
