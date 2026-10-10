@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — quietmason</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  .adm{max-width:1100px;margin:0 auto;padding:28px 24px 60px}
+  .adm h1{font-size:clamp(24px,3vw,34px);margin:0 0 6px}
+  .src{margin:0 0 22px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .badge{font-family:var(--mono);font-size:12.5px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--ink-3);background:var(--bg-2)}
+  .badge.live{color:#1d7a52;border-color:#bfe0cd;background:#f2faf5}
+  .badge.preview{color:#8a6100;border-color:#f0dcae;background:#fdf7e8}
+  .tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:0 0 26px}
+  .tile{border:1px solid var(--line-2);border-radius:12px;padding:14px 16px;background:#fff}
+  .tile b{display:block;font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums}
+  .tile span{font-size:12.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+  .cols{display:grid;gap:18px;grid-template-columns:1fr 1fr}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line-2);border-radius:12px;background:#fff;padding:16px 18px}
+  .panel h2{font-size:15px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+  table.mini{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.mini td{padding:6px 0;border-bottom:1px solid var(--line-2);vertical-align:top}
+  table.mini td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bar{height:6px;border-radius:3px;background:var(--accent);opacity:.75;margin-top:5px}
+  .log{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--ink-2);max-height:320px;overflow:auto}
+  .log div{padding:6px 0;border-bottom:1px solid var(--line-2)}
+  .muted{color:var(--ink-3);font-size:13px}
+  .empty{padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--ink-3);font-size:14px}
+</style>
+</head>
+<body>
+<div class="adm">
+  <h1>Dashboard</h1>
+  <div class="src">
+    <span class="badge" id="src">loading…</span>
+    <span class="muted" id="when"></span>
+    <button class="badge" id="reload" style="cursor:pointer">refresh</button>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><b id="t-pv">–</b><span>pageviews today</span></div>
+    <div class="tile"><b id="t-uv">–</b><span>visitors today</span></div>
+    <div class="tile"><b id="w-pv">–</b><span>pageviews 7d</span></div>
+    <div class="tile"><b id="w-uv">–</b><span>visitors 7d</span></div>
+    <div class="tile"><b id="c-n">–</b><span>chat messages</span></div>
+    <div class="tile"><b id="l-n">–</b><span>inquiries</span></div>
+  </div>
+
+  <div class="cols">
+    <div class="panel"><h2>Pages (7 days)</h2><table class="mini" id="pages"></table></div>
+    <div class="panel"><h2>Sources (7 days)</h2><table class="mini" id="refs"></table></div>
+    <div class="panel"><h2>Countries (7 days)</h2><table class="mini" id="countries"></table></div>
+    <div class="panel"><h2>Events (7 days)</h2><table class="mini" id="kinds"></table></div>
+    <div class="panel"><h2>Recent inquiries</h2><div class="log" id="leads"></div></div>
+    <div class="panel"><h2>Recent chat</h2><div class="log" id="chats"></div></div>
+  </div>
+
+  <p class="muted" style="margin-top:24px">This page is not indexed and not linked from the site. It reads aggregates only:
+  page counters, chat messages and inquiries. No cookies, and no personal data beyond what a visitor typed themselves.</p>
+</div>
+
+<script>
+(function () {
+  var token = new URLSearchParams(location.search).get('t') || localStorage.getItem('qm_admin_token') || '';
+  if (new URLSearchParams(location.search).get('t')) localStorage.setItem('qm_admin_token', token);
+
+  function rows(el, items, label) {
+    if (!items || !items.length) { el.innerHTML = '<tr><td colspan="2" class="muted">nothing yet</td></tr>'; return; }
+    var max = items[0].n || 1;
+    el.innerHTML = items.map(function (r) {
+      var name = r.k === undefined ? r[label] : r.k;
+      var w = Math.max(2, Math.round(100 * r.n / max));
+      return '<tr><td>' + esc(name) + '<div class="bar" style="width:' + w + '%"></div></td><td>' + r.n + '</td></tr>';
+    }).join('');
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+
+  function load() {
+    document.getElementById('src').textContent = 'loading…';
+    fetch('/api/admin', { headers: { 'x-admin-token': token } })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) {
+          var b = document.getElementById('src');
+          b.className = 'badge'; b.textContent = d.error + (d.error === 'unauthorized' ? ' — add ?t=<token>' : '');
+          return;
+        }
+        var b = document.getElementById('src');
+        b.className = 'badge ' + (d.source === 'local-preview' ? 'preview' : 'live');
+        b.textContent = d.source === 'local-preview'
+          ? 'source: local preview — not live traffic'
+          : 'source: ' + d.source;
+        document.getElementById('when').textContent = 'updated ' + new Date().toLocaleTimeString();
+        document.getElementById('t-pv').textContent = d.today.pv;
+        document.getElementById('t-uv').textContent = d.today.uv;
+        document.getElementById('w-pv').textContent = d.week.pv;
+        document.getElementById('w-uv').textContent = d.week.uv;
+        document.getElementById('c-n').textContent = d.chats.total;
+        document.getElementById('l-n').textContent = d.leads.total;
+        rows(document.getElementById('pages'), d.pages);
+        rows(document.getElementById('refs'), d.referrers);
+        rows(document.getElementById('countries'), d.countries);
+        rows(document.getElementById('kinds'), d.kinds);
+        var L = document.getElementById('leads');
+        L.innerHTML = (d.leads.recent && d.leads.recent.length)
+          ? d.leads.recent.map(function (x) { return '<div>' + esc(x.created_at) + ' · ' + esc(x.email) + ' · ' + esc(x.topic || '') + '</div>'; }).join('')
+          : '<div class="empty">no inquiries yet</div>';
+        var C = document.getElementById('chats');
+        C.innerHTML = (d.chats.recent && d.chats.recent.length)
+          ? d.chats.recent.map(function (x) { return '<div><b>' + esc(x.layer || 'chat') + '</b> ' + esc(String(x.msg || '').slice(0, 90)) + '</div>'; }).join('')
+          : '<div class="empty">no chat messages yet</div>';
+      })
+      .catch(function (e) {
+        var b = document.getElementById('src'); b.className = 'badge'; b.textContent = 'fetch failed: ' + e.message;
+      });
+  }
+  document.getElementById('reload').addEventListener('click', load);
+  load();
+  setInterval(load, 30000);
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 # quietmason.com - launch mode (indexable)
 User-agent: *
 Allow: /
+Disallow: /admin/
 Disallow: /*?fx=
 Sitemap: https://quietmason.com/sitemap.xml
 

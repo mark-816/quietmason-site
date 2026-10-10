@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------------
 User-agent: *
 Disallow: /
+Disallow: /admin/
 
 # ---- LAUNCH MODE (uncomment at launch, remove the block above) ----
 # User-agent: *
