@@ -50,7 +50,15 @@ export async function onRequestPost({ request, env }) {
     message
   };
 
-  if (env.QM_LEADS) {
+  // Record it first, in whichever store is bound. An enquiry that only exists in an email
+  // inbox is one we can lose; this is also what feeds /admin/.
+  if (env.DB) {
+    try {
+      await env.DB.prepare(
+        'INSERT INTO leads (email, topic, message, source, country) VALUES (?, ?, ?, ?, ?)'
+      ).bind(email, topic, message, source, record.country).run();
+    } catch (err) { /* fall through: email delivery is still worth trying */ }
+  } else if (env.QM_LEADS) {
     try {
       await env.QM_LEADS.put(`lead:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`, JSON.stringify(record));
     } catch (err) { /* storage failure must not lose the message we can still email */ }

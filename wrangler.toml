@@ -3,11 +3,18 @@ name = "quietmason"
 pages_build_output_dir = "site"
 compatibility_date = "2026-10-10"
 
-# Secrets and bindings are NOT set here (this file is committed/backed up).
-# Set them in the Pages project: Settings -> Variables and Secrets / Functions -> Bindings.
-#   RESEND_API_KEY  secret  enables contact-form delivery (else the form says so honestly)
-#   DEEPSEEK_KEY    secret  enables the chat model layer (rules layer works without it)
-#   CONTACT_TO      var     default hello@quietmason.com
-#   CONTACT_FROM    var     verified sender, e.g. site@quietmason.com
-#   DB (D1)         binding events / chat_logs / leads  (schema.sql)  -- or KV below
-#   QM_EVENTS / QM_LEADS / QM_LOGS (KV)  alternative to D1
+# Storage for the first-party tracker, chat log and enquiries.
+# database_id is an identifier, not a secret.
+[[d1_databases]]
+binding = "DB"
+database_name = "qm"
+database_id = "abcefd27-d956-4f05-b874-33b500c0fbe4"
+
+# Secrets are NOT set here (this file is committed/backed up). Set them in the Pages project
+# under Settings -> Variables and Secrets:
+#   ADMIN_TOKEN     secret  gates /api/admin (unset => the endpoint fails closed with 503)
+#   RESEND_API_KEY  secret  enables contact-form delivery (without it the form still records
+#                           the enquiry, and says a human will reply by email)
+#   DEEPSEEK_KEY    secret  enables the chat model layer (the rules layer works without it)
+#   CONTACT_TO      var     hello@quietmason.com
+#   CONTACT_FROM    var     site@quietmason.com

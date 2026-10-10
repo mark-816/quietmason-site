@@ -109,6 +109,14 @@ export async function onRequestPost({ request, env }) {
 }
 
 async function log(env, row) {
+  // Same record, whichever store is bound: D1 feeds /admin/ directly, KV is the fallback.
+  if (env.DB) {
+    try {
+      await env.DB.prepare('INSERT INTO chat_logs (ip, msg, reply, layer) VALUES (?, ?, ?, ?)')
+        .bind(row.ip || '', row.msg || '', row.reply || '', row.layer || '').run();
+    } catch (e) {}
+    return;
+  }
   if (!env.QM_LOGS) return;
   try { await env.QM_LOGS.put(`chat:${row.at}:${Math.random().toString(36).slice(2, 7)}`, JSON.stringify(row)); } catch (e) {}
 }
