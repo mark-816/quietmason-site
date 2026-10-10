@@ -1,0 +1,3 @@
+# www -> apex, and the index file -> root
+https://www.quietmason.com/* https://quietmason.com/:splat 301
+/index.html / 301

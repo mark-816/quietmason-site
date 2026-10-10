@@ -1,0 +1,4 @@
+# local working copies of scratch material
+*.bak
+*.log
+__pycache__/

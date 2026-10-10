@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Work — systems, pipelines and storefronts we built</title>
+<meta name="description" content="Notes on recent work: an operations system replacing spreadsheets, a publishing pipeline with quality gates, and a storefront built to run cheap.">
+<link rel="stylesheet" href="/assets/style.css">
+<script>window.QM_ANALYTICS={cfToken:"",eventEndpoint:""};</script>
+<script defer src="/assets/analytics.js"></script>
+<link rel="canonical" href="https://quietmason.com/work/">
+<meta name="theme-color" content="#0b0f14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quietmason.com/work/">
+<meta property="og:site_name" content="quietmason">
+<meta property="og:title" content="Work — systems, pipelines and storefronts we built">
+<meta property="og:description" content="Notes on recent work: an operations system replacing spreadsheets, a publishing pipeline with quality gates, and a storefront built to run cheap.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Work — systems, pipelines and storefronts we built">
+<meta name="twitter:description" content="Notes on recent work: an operations system replacing spreadsheets, a publishing pipeline with quality gates, and a storefront built to run cheap.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Work","url":"https://quietmason.com/work/","isPartOf":{"@type":"WebSite","name":"quietmason","url":"https://quietmason.com/"}}
+</script>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/"><span class="mark"></span>quietmason</a>
+    <nav>
+      <a href="/services/">Services</a>
+      <a href="/capabilities/">Capabilities</a>
+      <a href="/definitions/">Definitions</a>
+      <a href="/brief/">Brief</a>
+      <a href="/work/">Work</a>
+      <a href="/trust/">Trust</a>
+      <a href="/pricing/">Pricing</a>
+      <a class="cta-link" href="/contact/">Start a project</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero hero--head">
+    <div class="wrap page-head">
+    <div class="eyebrow accent">Selected work</div>
+    <h1>Three systems, described honestly</h1>
+    <p class="lede">Client names, screenshots and metrics stay private by agreement. What follows is the engineering: what the problem was, what we built, and what it runs on. Details and code on request.</p>
+    </div>
+  </div>
+
+  <section style="padding-top:clamp(24px,4vw,44px)">
+    <div class="wrap grid grid-3">
+      <div class="case">
+        <div class="case-top"><span class="who">Operations system</span><span class="badge ok">in production</span></div>
+        <div class="case-art">
+          <svg viewBox="0 0 320 132" preserveAspectRatio="none" aria-hidden="true">
+            <g fill="none" stroke="#c8d2e0" stroke-width="1.5">
+              <rect x="18" y="24" width="78" height="26" rx="5"/><rect x="18" y="76" width="78" height="26" rx="5"/>
+              <rect x="128" y="50" width="64" height="26" rx="5"/>
+              <rect x="222" y="24" width="80" height="26" rx="5"/><rect x="222" y="50" width="80" height="26" rx="5"/><rect x="222" y="76" width="80" height="26" rx="5"/>
+              <path d="M96 37 L128 60 M96 89 L128 66 M192 63 L222 37 M192 63 L222 63 M192 63 L222 89"/>
+            </g>
+            <g fill="#9aa8ba" font-family="ui-monospace,monospace" font-size="9">
+              <text x="30" y="41">booking</text><text x="30" y="93">stock</text>
+              <text x="140" y="67">api</text>
+              <text x="234" y="41">admin</text><text x="234" y="67">miniapp</text><text x="234" y="93">reports</text>
+            </g>
+          </svg>
+        </div>
+        <div class="case-body">
+          <h3>Replacing spreadsheets with one API</h3>
+          <p>A multi-branch studio ran appointments, stock and commissions in spreadsheets. We built a web admin and a customer-facing Mini Program on a single API: booking with conflict rules, stock movements tied to service records, commission calculation, and monthly exports for the accountant.</p>
+          <a class="go" href="/work/operations-system/">Read the build notes <span class="arw">→</span></a>
+        </div>
+        <div class="case-metas">
+          <div><b>React · Django · MySQL</b>stack</div>
+          <div><b>Admin + Mini Program</b>surfaces</div>
+        </div>
+        <div class="case-fine">Role-based access for manager and staff. Reports the accountant can reconcile line by line.</div>
+      </div>
+
+      <div class="case">
+        <div class="case-top"><span class="who">Publishing pipeline</span><span class="badge ok">in production</span></div>
+        <div class="case-art">
+          <svg viewBox="0 0 320 132" preserveAspectRatio="none" aria-hidden="true">
+            <g fill="none" stroke="#c8d2e0" stroke-width="1.5">
+              <rect x="18" y="52" width="66" height="28" rx="5"/>
+              <rect x="112" y="20" width="70" height="24" rx="5"/><rect x="112" y="54" width="70" height="24" rx="5"/><rect x="112" y="88" width="70" height="24" rx="5"/>
+              <rect x="212" y="54" width="90" height="24" rx="5"/>
+              <path d="M84 62 L112 32 M84 66 L112 66 M84 70 L112 100 M182 66 L212 66"/>
+              <path d="M212 66 L246 66" stroke-dasharray="4 3"/>
+            </g>
+            <g fill="#9aa8ba" font-family="ui-monospace,monospace" font-size="9">
+              <text x="30" y="70">dataset</text>
+              <text x="122" y="35">draft</text><text x="122" y="69">gates</text><text x="122" y="103">publish</text>
+              <text x="222" y="69">schedule</text>
+            </g>
+          </svg>
+        </div>
+        <div class="case-body">
+          <h3>Dataset in, finished pages out</h3>
+          <p>Content published by hand every week needed the repetition automated, without losing editorial control. The pipeline reads the source data, generates pages from templates, runs pre-publish quality gates, releases on a schedule, and reports a failure instead of shipping something broken.</p>
+          <a class="go" href="/work/publishing-pipeline/">Read the build notes <span class="arw">→</span></a>
+        </div>
+        <div class="case-metas">
+          <div><b>Python · cron · static output</b>stack</div>
+          <div><b>Editors keep the decisions</b>division of labor</div>
+        </div>
+        <div class="case-fine">Gates block a release when a required field, image or link is missing — the failure is visible, not silent.</div>
+      </div>
+
+      <div class="case">
+        <div class="case-top"><span class="who">Storefront</span><span class="badge ok">in production</span></div>
+        <div class="case-art">
+          <svg viewBox="0 0 320 132" preserveAspectRatio="none" aria-hidden="true">
+            <g fill="none" stroke="#c8d2e0" stroke-width="1.5">
+              <rect x="18" y="30" width="66" height="72" rx="5"/>
+              <rect x="104" y="18" width="96" height="96" rx="5"/>
+              <rect x="220" y="42" width="82" height="24" rx="5"/><rect x="220" y="74" width="82" height="24" rx="5"/>
+              <path d="M84 66 L104 66 M200 66 L220 54 M200 66 L220 86"/>
+            </g>
+            <g fill="#9aa8ba" font-family="ui-monospace,monospace" font-size="9">
+              <text x="28" y="46">data</text><text x="28" y="60">file</text>
+              <text x="114" y="40">catalog</text><text x="114" y="54">pages</text>
+              <text x="230" y="58">checkout</text><text x="230" y="90">notify</text>
+            </g>
+          </svg>
+        </div>
+        <div class="case-body">
+          <h3>A store that had to be cheap to run</h3>
+          <p>An English-language storefront where the catalog and every product page are generated from a single data file, order capture is wired straight to email notifications, and hosting has no monthly platform fee. A redirect map keeps everything that previously ranked alive.</p>
+          <a class="go" href="/work/storefront/">Read the build notes <span class="arw">→</span></a>
+        </div>
+        <div class="case-metas">
+          <div><b>Static output · PHP for forms</b>stack</div>
+          <div><b>Zero platform dependency</b>hosting posture</div>
+        </div>
+        <div class="case-fine">Structured data and Core Web Vitals checked page by page before launch, not after.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">How we describe work</div>
+        <h2>No dashboards pointing upward</h2>
+        <p class="note" style="margin-top:16px"><b>The rule these notes follow:</b> if a number is not verified and approved by the client, it does not appear. If the client cannot be named, the work is anonymized without inventing detail: sector, constraint and process instead of a logo.</p>
+        <p class="lede">You will not find invented percentages here, and no client is named without consent. Every claim on this site is either something you can verify from a public source, or something we will show you privately when it is your project.</p>
+      </div>
+      <div class="grid grid-2" style="margin-top:28px">
+        <div class="card"><div class="kicker">What we show</div><h3>Architecture, decisions, trade-offs</h3><p>The reason a pipeline retries three times, why a page is server-rendered, what we did not build. That is the part a buyer can actually evaluate.</p></div>
+        <div class="card"><div class="kicker">What we withhold</div><h3>Client identity and client numbers</h3><p>Because a supplier who publishes your conversion rate to win the next pitch will publish the next client's too.</p></div>
+      </div>
+      <div class="cta" style="margin-top:30px">
+        <a class="btn btn-light" href="/contact/">Ask about a project like yours <span class="arw">→</span></a>
+        <a class="btn btn-outline-light" href="/trust/">Read our commitments</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="bar2">
+      <div><strong>quietmason</strong> — automation, data pipelines, technical SEO.</div>
+      <div><a href="mailto:hello@quietmason.com">hello@quietmason.com</a></div>
+    </div>
+    <div class="fnav">
+      <a href="/services/">Services</a>
+      <a href="/capabilities/">Capabilities</a>
+      <a href="/definitions/">Definitions</a>
+      <a href="/brief/">Brief</a>
+      <a href="/work/">Work</a>
+      <a href="/trust/">Trust</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/contact/">Contact</a>
+    </div>
+  </div>
+</footer>
+<script defer src="/assets/app.js"></script>
+<script>window.QM_TRACK_ENDPOINT="/api/track";window.QM_CHAT_ENDPOINT="/api/chat";</script>
+<script defer src="/assets/track.js" data-site="quietmason"></script>
+<script defer src="/assets/chat.js" data-chat-widget></script>
+<script defer src="/assets/motion.js"></script>
+</body>
+</html>

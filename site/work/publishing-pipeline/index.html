@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Case notes: a publishing pipeline with quality gates | quietmason</title>
+<meta name="description" content="How a weekly publishing workflow became a pipeline with pre-release quality gates: architecture, failure handling and what editors keep doing by hand.">
+<link rel="stylesheet" href="/assets/style.css">
+<script>window.QM_ANALYTICS={cfToken:"",eventEndpoint:""};</script>
+<script defer src="/assets/analytics.js"></script>
+<link rel="canonical" href="https://quietmason.com/work/publishing-pipeline/">
+<meta name="theme-color" content="#0b0f14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quietmason.com/work/publishing-pipeline/">
+<meta property="og:site_name" content="quietmason">
+<meta property="og:title" content="Case notes: a publishing pipeline with quality gates | quietmason">
+<meta property="og:description" content="How a weekly publishing workflow became a pipeline with pre-release quality gates: architecture, failure handling and what editors keep doing by hand.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Case notes: a publishing pipeline with quality gates | quietmason">
+<meta name="twitter:description" content="How a weekly publishing workflow became a pipeline with pre-release quality gates: architecture, failure handling and what editors keep doing by hand.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"Home","item":"https://quietmason.com/"},
+ {"@type":"ListItem","position":2,"name":"Work","item":"https://quietmason.com/work/"},
+ {"@type":"ListItem","position":3,"name":"Dataset in, finished pages out","item":"https://quietmason.com/work/publishing-pipeline/"}]}
+</script>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/"><span class="mark"></span>quietmason</a>
+    <nav>
+      <a href="/services/">Services</a>
+      <a href="/capabilities/">Capabilities</a>
+      <a href="/definitions/">Definitions</a>
+      <a href="/brief/">Brief</a>
+      <a href="/work/">Work</a>
+      <a href="/trust/">Trust</a>
+      <a href="/pricing/">Pricing</a>
+      <a class="cta-link" href="/contact/">Start a project</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero hero--head">
+    <div class="wrap page-head">
+    <div class="eyebrow accent">PUBLISHING · case notes</div>
+    <h1>Dataset in, finished pages out</h1>
+    <p class="lede">A business publishing content on a fixed schedule did every step by hand: reading the source data, formatting pages, checking they were complete, uploading them. The work was repetitive but not trivial, and the failures were embarrassing: a missing image or a dead link shipped to readers because nobody had time to check.</p>
+    </div>
+  </div>
+
+  <section style="padding-top:clamp(24px,4vw,44px)">
+    <div class="wrap grid grid-2">
+      <div>
+        <div class="eyebrow">Constraints</div>
+        <h2 style="margin-top:10px">What shaped the work</h2>
+        <ul class="clean" style="margin-top:16px"><li>Editors keep editorial control: the pipeline may never decide what gets published.</li>
+<li>A release must be able to fail safely — half-published is worse than not published.</li>
+<li>The output had to be plain files that the existing host could serve, with no new monthly platform.</li>
+<li>Non-technical staff needed to re-run a single item without touching the database.</li></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Stack</div>
+        <h2 style="margin-top:10px">What it runs on</h2>
+        <p class="lede" style="margin-top:16px">Python · cron · static output · validation gates</p>
+        <div class="case-metas" style="border:1px solid var(--line-2);border-radius:12px;margin-top:18px">
+          <div><b>Editors</b>keep the decisions</div>
+          <div><b>In production</b>still maintained</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head"><div class="eyebrow">Build</div><h2>What we actually built</h2></div>
+      <ul class="clean" style="margin-top:22px"><li>Source data in, pages out: templates plus per-item validation, run on a schedule.</li>
+<li>Quality gates before release: required fields, image presence, link resolution, duplicate slugs. Anything failing is held back and reported, not published.</li>
+<li>Failures are loud: the run leaves a log tail and an email, and the previously published version stays live.</li>
+<li>Single-item re-run, so an editor who fixes one record does not wait for tomorrow's batch.</li>
+<li>Static output is diffed before release, so a template change cannot alter hundreds of pages at once.</li></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div class="eyebrow">Decisions</div><h2>The choices that mattered</h2></div>
+      <div style="margin-top:22px;max-width:82ch">        <div class="trow"><h3>Gates block, humans decide</h3><p>The pipeline never publishes around a failed check.</p></div>
+        <div class="trow"><h3>Static output</h3><p>Cheap to host, trivial to back up, nothing to keep patched.</p></div>
+        <div class="trow"><h3>Re-run one item</h3><p>The most-used feature in practice; without it, staff work around the system.</p></div>
+        <div class="trow"><h3>Report, do not retry blindly</h3><p>A missing field is not a transient error. Retrying it just hides it three more times.</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap grid grid-2">
+      <div>
+        <div class="eyebrow">Left open</div>
+        <h2 style="margin-top:10px">What we would do next</h2>
+        <ul class="clean" style="margin-top:16px"><li>Editorial preview links so a draft can be reviewed by someone outside the team before release.</li>
+<li>Scheduled release windows per section instead of one global batch.</li></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Honesty note</div>
+        <h2 style="margin-top:10px">What is not on this page</h2>
+        <p class="lede" style="margin-top:16px">No client name, no screenshots of their data and no metrics: those are theirs. What is here is the engineering, which is the part a buyer can evaluate. On a call we will walk through the code.</p>
+        <div class="cta" style="margin-top:22px">
+          <a class="btn btn-primary" href="/contact/">Ask about a project like this <span class="arw">→</span></a>
+          <a class="btn btn-ghost" href="/work/">All work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="bar2">
+      <div><strong>quietmason</strong> — automation, data pipelines, technical SEO.</div>
+      <div><a href="mailto:hello@quietmason.com">hello@quietmason.com</a></div>
+    </div>
+    <div class="fnav">
+      <a href="/services/">Services</a><a href="/capabilities/">Capabilities</a><a href="/work/">Work</a>
+      <a href="/trust/">Trust</a><a href="/pricing/">Pricing</a><a href="/contact/">Contact</a>
+    </div>
+  </div>
+</footer>
+<script defer src="/assets/app.js"></script>
+<script>window.QM_TRACK_ENDPOINT="/api/track";window.QM_CHAT_ENDPOINT="/api/chat";</script>
+<script defer src="/assets/track.js" data-site="quietmason"></script>
+<script defer src="/assets/chat.js" data-chat-widget></script>
+<script defer src="/assets/motion.js"></script>
+</body>
+</html>

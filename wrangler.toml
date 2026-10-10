@@ -1,0 +1,13 @@
+# Cloudflare Pages project config for quietmason.com
+name = "quietmason"
+pages_build_output_dir = "site"
+compatibility_date = "2026-10-10"
+
+# Secrets and bindings are NOT set here (this file is committed/backed up).
+# Set them in the Pages project: Settings -> Variables and Secrets / Functions -> Bindings.
+#   RESEND_API_KEY  secret  enables contact-form delivery (else the form says so honestly)
+#   DEEPSEEK_KEY    secret  enables the chat model layer (rules layer works without it)
+#   CONTACT_TO      var     default hello@quietmason.com
+#   CONTACT_FROM    var     verified sender, e.g. site@quietmason.com
+#   DB (D1)         binding events / chat_logs / leads  (schema.sql)  -- or KV below
+#   QM_EVENTS / QM_LEADS / QM_LOGS (KV)  alternative to D1

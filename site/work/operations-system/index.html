@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Case notes: booking and inventory system | quietmason</title>
+<meta name="description" content="How a multi-branch studio moved off spreadsheets onto one API with a web admin and a customer Mini Program: constraints, architecture and decisions.">
+<link rel="stylesheet" href="/assets/style.css">
+<script>window.QM_ANALYTICS={cfToken:"",eventEndpoint:""};</script>
+<script defer src="/assets/analytics.js"></script>
+<link rel="canonical" href="https://quietmason.com/work/operations-system/">
+<meta name="theme-color" content="#0b0f14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quietmason.com/work/operations-system/">
+<meta property="og:site_name" content="quietmason">
+<meta property="og:title" content="Case notes: booking and inventory system | quietmason">
+<meta property="og:description" content="How a multi-branch studio moved off spreadsheets onto one API with a web admin and a customer Mini Program: constraints, architecture and decisions.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Case notes: booking and inventory system | quietmason">
+<meta name="twitter:description" content="How a multi-branch studio moved off spreadsheets onto one API with a web admin and a customer Mini Program: constraints, architecture and decisions.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"Home","item":"https://quietmason.com/"},
+ {"@type":"ListItem","position":2,"name":"Work","item":"https://quietmason.com/work/"},
+ {"@type":"ListItem","position":3,"name":"Replacing spreadsheets with one API","item":"https://quietmason.com/work/operations-system/"}]}
+</script>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/"><span class="mark"></span>quietmason</a>
+    <nav>
+      <a href="/services/">Services</a>
+      <a href="/capabilities/">Capabilities</a>
+      <a href="/definitions/">Definitions</a>
+      <a href="/brief/">Brief</a>
+      <a href="/work/">Work</a>
+      <a href="/trust/">Trust</a>
+      <a href="/pricing/">Pricing</a>
+      <a class="cta-link" href="/contact/">Start a project</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero hero--head">
+    <div class="wrap page-head">
+    <div class="eyebrow accent">OPERATIONS · case notes</div>
+    <h1>Replacing spreadsheets with one API</h1>
+    <p class="lede">A studio group with several branches tracked appointments, stock and staff commissions in spreadsheets. Every branch kept its own file, the same client could hold two appointment records, and monthly commission numbers were reconstructed by hand at the end of each month.</p>
+    </div>
+  </div>
+
+  <section style="padding-top:clamp(24px,4vw,44px)">
+    <div class="wrap grid grid-2">
+      <div>
+        <div class="eyebrow">Constraints</div>
+        <h2 style="margin-top:10px">What shaped the work</h2>
+        <ul class="clean" style="margin-top:16px"><li>Staff were not going to learn a new desktop tool — the admin had to work in a browser and be usable on a tablet at the counter.</li>
+<li>Customers already lived inside a chat app, so the customer-facing surface had to be a Mini Program rather than a web login.</li>
+<li>Money-adjacent numbers (stock movements, commissions) had to be auditable: who changed what, when.</li>
+<li>Existing historical records needed to survive the move, including the inconsistencies.</li></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Stack</div>
+        <h2 style="margin-top:10px">What it runs on</h2>
+        <p class="lede" style="margin-top:16px">React (admin) · Django REST API · MySQL · WeChat Mini Program</p>
+        <div class="case-metas" style="border:1px solid var(--line-2);border-radius:12px;margin-top:18px">
+          <div><b>19</b>Django apps</div>
+          <div><b>39</b>data models</div>
+          <div><b>60</b>API endpoints</div>
+          <div><b>30</b>admin screens</div>
+          <div><b>69</b>schema migrations</div>
+          <div><b>99</b>automated tests</div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head"><div class="eyebrow">Build</div><h2>What we actually built</h2></div>
+      <ul class="clean" style="margin-top:22px"><li>One API behind both surfaces: booking, stock, staff, reporting. No business rule lives in the client apps, so the admin and the Mini Program can never disagree.</li>
+<li>Booking carries explicit conflict rules (staff, room, service duration) instead of the soft warnings a spreadsheet gives.</li>
+<li>Stock movements are recorded as events tied to the service that consumed them, so a reconciliation can be reconstructed retrospectively.</li>
+<li>Commission is a function of stored events, not a typed number — recalculating an old month gives the same answer.</li>
+<li>The accountant exports one file per month from the admin rather than extracting anything from the database.</li></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div class="eyebrow">Decisions</div><h2>The choices that mattered</h2></div>
+      <div style="margin-top:22px;max-width:82ch">        <div class="trow"><h3>Single API, thin clients</h3><p>Two front ends over one rulebook beats two implementations that drift apart in month two.</p></div>
+        <div class="trow"><h3>Events, not balances</h3><p>A stored balance cannot answer "why is this number different from last month".</p></div>
+        <div class="trow"><h3>Import the mess, then clean</h3><p>We imported the historical rows verbatim and flagged the duplicates, rather than silently merging records and losing the trail.</p></div>
+        <div class="trow"><h3>Boring stack</h3><p>Django and MySQL: a future maintainer can read it without a framework tour.</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap grid grid-2">
+      <div>
+        <div class="eyebrow">Left open</div>
+        <h2 style="margin-top:10px">What we would do next</h2>
+        <ul class="clean" style="margin-top:16px"><li>Branch-level performance views — the manager currently reads branch comparisons off raw exports.</li>
+<li>Reminder sequence for no-shows, driven from the booking records rather than a separate tool.</li></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Honesty note</div>
+        <h2 style="margin-top:10px">What is not on this page</h2>
+        <p class="lede" style="margin-top:16px">No client name, no screenshots of their data and no metrics: those are theirs. What is here is the engineering, which is the part a buyer can evaluate. On a call we will walk through the code.</p>
+        <div class="cta" style="margin-top:22px">
+          <a class="btn btn-primary" href="/contact/">Ask about a project like this <span class="arw">→</span></a>
+          <a class="btn btn-ghost" href="/work/">All work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="bar2">
+      <div><strong>quietmason</strong> — automation, data pipelines, technical SEO.</div>
+      <div><a href="mailto:hello@quietmason.com">hello@quietmason.com</a></div>
+    </div>
+    <div class="fnav">
+      <a href="/services/">Services</a><a href="/capabilities/">Capabilities</a><a href="/work/">Work</a>
+      <a href="/trust/">Trust</a><a href="/pricing/">Pricing</a><a href="/contact/">Contact</a>
+    </div>
+  </div>
+</footer>
+<script defer src="/assets/app.js"></script>
+<script>window.QM_TRACK_ENDPOINT="/api/track";window.QM_CHAT_ENDPOINT="/api/chat";</script>
+<script defer src="/assets/track.js" data-site="quietmason"></script>
+<script defer src="/assets/chat.js" data-chat-widget></script>
+<script defer src="/assets/motion.js"></script>
+</body>
+</html>

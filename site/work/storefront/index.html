@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Case notes: a storefront without platform bills | quietmason</title>
+<meta name="description" content="Case notes on an English-language storefront generated from one data file, with order notifications by email and no monthly platform dependency.">
+<link rel="stylesheet" href="/assets/style.css">
+<script>window.QM_ANALYTICS={cfToken:"",eventEndpoint:""};</script>
+<script defer src="/assets/analytics.js"></script>
+<link rel="canonical" href="https://quietmason.com/work/storefront/">
+<meta name="theme-color" content="#0b0f14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quietmason.com/work/storefront/">
+<meta property="og:site_name" content="quietmason">
+<meta property="og:title" content="Case notes: a storefront built to run without a platform bill | quietmason">
+<meta property="og:description" content="Case notes on an English-language storefront generated from one data file, with order notifications by email and no monthly platform dependency.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Case notes: a storefront built to run without a platform bill | quietmason">
+<meta name="twitter:description" content="Case notes on an English-language storefront generated from one data file, with order notifications by email and no monthly platform dependency.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"Home","item":"https://quietmason.com/"},
+ {"@type":"ListItem","position":2,"name":"Work","item":"https://quietmason.com/work/"},
+ {"@type":"ListItem","position":3,"name":"A store that had to be cheap to run","item":"https://quietmason.com/work/storefront/"}]}
+</script>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/"><span class="mark"></span>quietmason</a>
+    <nav>
+      <a href="/services/">Services</a>
+      <a href="/capabilities/">Capabilities</a>
+      <a href="/definitions/">Definitions</a>
+      <a href="/brief/">Brief</a>
+      <a href="/work/">Work</a>
+      <a href="/trust/">Trust</a>
+      <a href="/pricing/">Pricing</a>
+      <a class="cta-link" href="/contact/">Start a project</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero hero--head">
+    <div class="wrap page-head">
+    <div class="eyebrow accent">STOREFRONT · case notes</div>
+    <h1>A store that had to be cheap to run</h1>
+    <p class="lede">A product business needed an English storefront for overseas buyers. The requirement that shaped everything else was cost: no monthly platform subscription, no per-app fees, and no dependency on a service that could change its pricing or disappear.</p>
+    </div>
+  </div>
+
+  <section style="padding-top:clamp(24px,4vw,44px)">
+    <div class="wrap grid grid-2">
+      <div>
+        <div class="eyebrow">Constraints</div>
+        <h2 style="margin-top:10px">What shaped the work</h2>
+        <ul class="clean" style="margin-top:16px"><li>One data file had to be the source of truth for the catalog — pricing and copy edited in one place.</li>
+<li>Orders had to reach a human immediately, on a channel that already existed: email.</li>
+<li>Everything that previously ranked had to keep working through the move: URL map, redirects, structured data.</li>
+<li>Pages had to be fast on a phone on a slow connection, because most traffic was mobile.</li></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Stack</div>
+        <h2 style="margin-top:10px">What it runs on</h2>
+        <p class="lede" style="margin-top:16px">Static generation · PHP for forms and order capture · structured data</p>
+        <div class="case-metas" style="border:1px solid var(--line-2);border-radius:12px;margin-top:18px">
+          <div><b>Platform dependency</b>none</div>
+          <div><b>In production</b>still maintained</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head"><div class="eyebrow">Build</div><h2>What we actually built</h2></div>
+      <ul class="clean" style="margin-top:22px"><li>Catalog and product pages generated from a single data file, so a price change is one line, not thirty pages.</li>
+<li>Order capture posts to a server-rendered endpoint and sends a structured notification email — no third-party checkout fee.</li>
+<li>Static output on cheap hosting, with PHP only where a form needs a server.</li>
+<li>Redirect map built from the old site's URL inventory before launch, not after the traffic graph fell over.</li>
+<li>Structured data and Core Web Vitals checked page by page before launch.</li></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div class="eyebrow">Decisions</div><h2>The choices that mattered</h2></div>
+      <div style="margin-top:22px;max-width:82ch">        <div class="trow"><h3>One data file</h3><p>Content in one place beats a database when the catalog is small and hand-curated.</p></div>
+        <div class="trow"><h3>Email as the order channel</h3><p>Fewer moving parts than a webhook chain, and it works on any device.</p></div>
+        <div class="trow"><h3>Static plus a little PHP</h3><p>Fast and cheap to host, and it does not need a platform to stay alive.</p></div>
+        <div class="trow"><h3>Design for the phone</h3><p>Desktop-only pages were the original problem: the numbers were there but nobody could read them on a phone.</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap grid grid-2">
+      <div>
+        <div class="eyebrow">Left open</div>
+        <h2 style="margin-top:10px">What we would do next</h2>
+        <ul class="clean" style="margin-top:16px"><li>Order status page for buyers, generated from the same order records.</li>
+<li>Automated sitemap and schema checks in the release routine.</li></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Honesty note</div>
+        <h2 style="margin-top:10px">What is not on this page</h2>
+        <p class="lede" style="margin-top:16px">No client name, no screenshots of their data and no metrics: those are theirs. What is here is the engineering, which is the part a buyer can evaluate. On a call we will walk through the code.</p>
+        <div class="cta" style="margin-top:22px">
+          <a class="btn btn-primary" href="/contact/">Ask about a project like this <span class="arw">→</span></a>
+          <a class="btn btn-ghost" href="/work/">All work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="bar2">
+      <div><strong>quietmason</strong> — automation, data pipelines, technical SEO.</div>
+      <div><a href="mailto:hello@quietmason.com">hello@quietmason.com</a></div>
+    </div>
+    <div class="fnav">
+      <a href="/services/">Services</a><a href="/capabilities/">Capabilities</a><a href="/work/">Work</a>
+      <a href="/trust/">Trust</a><a href="/pricing/">Pricing</a><a href="/contact/">Contact</a>
+    </div>
+  </div>
+</footer>
+<script defer src="/assets/app.js"></script>
+<script>window.QM_TRACK_ENDPOINT="/api/track";window.QM_CHAT_ENDPOINT="/api/chat";</script>
+<script defer src="/assets/track.js" data-site="quietmason"></script>
+<script defer src="/assets/chat.js" data-chat-widget></script>
+<script defer src="/assets/motion.js"></script>
+</body>
+</html>

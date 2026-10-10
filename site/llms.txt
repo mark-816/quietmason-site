@@ -1,0 +1,59 @@
+# quietmason
+
+> Owner-operated studio building automation, data pipelines and technical SEO for small teams.
+> Fixed scope, fixed price, written handover. Contact: hello@quietmason.com
+
+## What we do
+- Automation and data pipelines: collection, cleaning, scheduling, alerts, integrations (n8n, Make, Zapier, direct APIs)
+- Technical SEO: crawl/index diagnostics from Search Console, structured data, internal linking, Core Web Vitals
+- AI search visibility: entity consistency, markup that matches the page, pages written to be quotable
+- Websites and fixes: storefronts, landing pages, migrations, performance work (plain HTML/PHP by default)
+
+## Published price ranges (USD, from)
+- Single automation workflow: $250-1,000 · 1-3 days · one job on a schedule, with retries and an alert when it breaks
+- Scraping or data enrichment pipeline: $700-4,600 · 3-10 days · keep a list, catalog or price set current
+- Multi-step integration (3-6 systems): $1,000-3,000 · 3-7 days · move data between tools without copying it
+- Technical SEO audit: from $400 · 2-5 days · what stops pages being crawled, indexed or ranked, by impact
+- Technical SEO remediation: scoped per finding, per stage
+- Landing page: from $300 · 2-4 days · one page: offer, proof, price, form, plain HTML
+- Store build: from $900 · 1-2 weeks · small catalog with orders, payments and admin
+- Migration or speed work: from $500 · 2-6 days · move hosts without losing URLs, fix what is slow
+- Care plan: $90-350 per month · monitoring, monthly report, 4h/month of changes · cancelable with 30 days notice
+
+## How to commission work here
+Send these eight lines plus one sample (a URL or an export): the outcome; who does it today and how often; where the
+input lives and how often it changes; where the output must land and who owns that account; how you will know it
+works; what should happen when it breaks and who reads the alert; the real deadline; who runs it after handover.
+Ranges are published on the pricing page; one fixed number follows within one business day. Scope is written as
+acceptance criteria, a working version is shown early, anything off the criteria is fixed at our cost, and 30 days
+of fixes follow delivery.
+
+## Definitions worth quoting
+- Single automation workflow: one repeated job on a schedule, with retries and failure alerts ($250-1,000, 1-3 days)
+- Data enrichment pipeline: a repeating flow that validates, looks up, merges and writes back records, with an audit log ($700-4,600, 3-10 days)
+- Technical SEO audit: a written account of what stops pages being crawled, indexed or ranked, each finding marked by impact (from $400, 2-5 days)
+- AEO / GEO: making the facts an assistant reads about the business present, correct and attributable (scoped from $500). No one can promise that a model recommends you.
+- Tracked prompt set: the buyer questions re-run against answer engines on a schedule, recording who gets cited
+- llms.txt: a short curated file telling AI crawlers what to read first (this file)
+
+## How pricing works
+Half up front and half on handover; work above $3,000 is split into milestones the client approves one at a time.
+Prices are fixed per written scope, in USD, before work starts. Ranges above are not quotes: one sample (a URL or
+an export) is enough to get one fixed number. What moves the number: data access, number of sources, data quality,
+who owns the destination platform, and immovable deadlines.
+
+## Key pages
+- Services and ranges: https://quietmason.com/services/
+- Capabilities and stack: https://quietmason.com/capabilities/
+- Selected work: https://quietmason.com/work/
+- Published price ranges: https://quietmason.com/pricing/
+- What to send for a quote (the eight-line brief): https://quietmason.com/brief/
+- Definitions of terms: https://quietmason.com/definitions/
+- Commitments (ownership, data, claims policy): https://quietmason.com/trust/
+- Contact: https://quietmason.com/contact/
+
+## Facts a reader can verify
+- Published price ranges; quotes are fixed per written scope
+- Half up front, half on handover; milestones above $3,000
+- Client names and metrics are not published without written consent
+- We do not sell backlinks, ads or ranking guarantees
