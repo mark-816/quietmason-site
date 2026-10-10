@@ -63,12 +63,15 @@ export async function onRequestGet({ request, env }) {
   });
 }
 
-/* the series must be continuous: gaps are real zeros, not missing days */
+/* the series must be continuous: gaps are real zeros, not missing days.
+   Labels are generated with the same UTC+8 offset the SQL buckets use, otherwise between
+   00:00 and 08:00 Beijing time the generated labels slip a day behind the rows and the
+   newest bucket reads as zero. */
 function fillDays(rows, n) {
   const have = new Map((rows || []).map((r) => [String(r.d).slice(0, 10), r]));
   const out = [];
   for (let i = n - 1; i >= 0; i--) {
-    const day = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    const day = new Date(Date.now() + OFFSET_MS - i * 86400000).toISOString().slice(0, 10);
     const r = have.get(day);
     out.push({ d: day, pv: r ? Number(r.pv) : 0, uv: r ? Number(r.uv) : 0 });
   }
@@ -94,9 +97,13 @@ async function kvAll(ns) {
   }
 }
 
-/* same shapes as the D1 path, so the dashboard never has to care where the data came from */
+/* same shapes as the D1 path, so the dashboard never has to care where the data came from.
+   Buckets are UTC+8 to match date(created_at,'+8 hours') in the D1 queries and the label
+   the dashboard shows. */
+const OFFSET_MS = 8 * 3600 * 1000;
 function dayKey(t) {
-  return new Date(typeof t === 'number' ? t : Date.parse(t) || Date.now()).toISOString().slice(0, 10);
+  const ms = typeof t === 'number' ? t : Date.parse(t) || Date.now();
+  return new Date(ms + OFFSET_MS).toISOString().slice(0, 10);
 }
 
 function dailySeries(events, n) {
@@ -110,7 +117,7 @@ function dailySeries(events, n) {
   }
   const out = [];
   for (let i = n - 1; i >= 0; i--) {
-    const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    const d = new Date(Date.now() + OFFSET_MS - i * 86400000).toISOString().slice(0, 10);
     const cur = byDay.get(d);
     out.push({ d, pv: cur ? cur.pv : 0, uv: cur ? cur.ips.size : 0 });
   }
@@ -164,7 +171,7 @@ function aggregate(events, chats, leads) {
     chats: { total: chats.length, recent: chats.slice(-25).reverse() },
     leads: { total: leads.length, recent: leads.slice(-25).reverse() },
     bots: [],
-    daily: dailySeries(events, 14),
+    daily: dailySeries(events, 30),
     landing: landingPages(events),
     queue: chats.filter((c) => c.layer && c.layer !== 'rule').slice(-25).reverse()
   };
