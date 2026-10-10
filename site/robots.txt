@@ -1,34 +1,25 @@
-# quietmason.com
-# ---------------------------------------------------------------------------
-# PRE-LAUNCH: the whole site stays out of every index until the domain is live.
-# Flip to launch mode by replacing the three lines below with the block that
-# follows them (they are kept side by side so the change is one edit).
-# ---------------------------------------------------------------------------
+# quietmason.com - launch mode (indexable)
 User-agent: *
-Disallow: /
+Allow: /
 Disallow: /admin/
+Disallow: /*?fx=
+Sitemap: https://quietmason.com/sitemap.xml
 
-# ---- LAUNCH MODE (uncomment at launch, remove the block above) ----
-# User-agent: *
-# Allow: /
-# Disallow: /*?fx=
-# Sitemap: https://quietmason.com/sitemap.xml
-#
-# # Answer engines are welcome: we want to be quoted, not hidden.
-# User-agent: GPTBot
-# Allow: /
-# User-agent: OAI-SearchBot
-# Allow: /
-# User-agent: ChatGPT-User
-# Allow: /
-# User-agent: PerplexityBot
-# Allow: /
-# User-agent: ClaudeBot
-# Allow: /
-# User-agent: Google-Extended
-# Allow: /
-# User-agent: Applebot-Extended
-# Allow: /
-#
-# # Keep the hidden motion panel out of the index even if it is linked.
-# Disallow: /?fx=1
+# Answer engines are welcome: we want to be quoted, not hidden.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# The hidden motion panel stays out of the index even if it gets linked.
+Disallow: /?fx=1
