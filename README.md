@@ -32,9 +32,9 @@ fallback and the server rules layer cannot drift apart.
 
 ## Notes
 
-- No cookies, no third-party analytics by default: the analytics slot stays inert until a
+- No cookies and no third-party analytics by default: the analytics slot stays inert until a
   Cloudflare Web Analytics token is configured.
-- The chat panel answers from a rules layer and falls back to the site's own copy; it says so
-  rather than pretending to be a person.
-- Contact form submissions are validated server-side and dropped silently if the honeypot is
-  filled. Delivery requires a mail provider key that is not in this repository.
+- The chat panel answers from a rules layer built from this site's own copy, and says so rather
+  than pretending to be a person.
+- Contact submissions are validated server-side and dropped silently when the honeypot is
+  filled. Delivery needs a mail-provider key that is not in this repository.
