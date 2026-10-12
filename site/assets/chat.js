@@ -95,9 +95,10 @@ ChatWidget.prototype = {
     var panel = _el('div', {
       id: 'ai-panel',
       css: {
-        display:'none', position:'fixed',
+        display:'none', position:'fixed', flexDirection:'column',
         bottom:c.position.bottom+'px', right:c.position.right+'px',
-        zIndex:9999, width:360, maxWidth:'calc(100vw - 48px)',
+        zIndex:9999, width:384, maxWidth:'calc(100vw - 32px)',
+        height:'min(620px, calc(100dvh - 7rem))',
         background:'#fff', borderRadius:16, overflow:'hidden',
         boxShadow:'0 8px 40px rgba(0,0,0,0.15)'
       }
@@ -115,12 +116,12 @@ ChatWidget.prototype = {
       '<span style="font-size:22px">&#9679;</span>' +
       '<span style="font-weight:700;font-size:14px">'+c.title+'</span>' +
       '<span style="font-size:10px;opacity:.7">'+c.status+'</span></div>' +
-      '<span id="ai-close" style="font-size:20px;line-height:1;opacity:.8;cursor:pointer">✕</span>';
+      '<span id="ai-close" role="button" title="Minimize the chat" aria-label="Minimize chat" style="font-size:22px;line-height:1;opacity:.8;cursor:pointer">&#8964;</span>';
 
     // Messages
     var msgs = _el('div', {
       id: 'ai-msgs',
-      css: { maxHeight:280, minHeight:60, overflowY:'auto', padding:12, background:'#fafafa' }
+      css: { flex:'1 1 auto', minHeight:60, overflowY:'auto', padding:12, background:'#fafafa' }
     });
     msgs.innerHTML = '<div style="display:flex;gap:6px;align-items:flex-start">' +
       '<span style="font-size:20px;flex-shrink:0">&#9679;</span>' +
@@ -165,7 +166,7 @@ ChatWidget.prototype = {
   },
 
   open: function(){
-    this._elements.panel.style.display = 'block';
+    this._elements.panel.style.display = 'flex';
     this._elements.trigger.style.display = 'none';
     this._open = true;
   },
