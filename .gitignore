@@ -1,4 +1,7 @@
 # local working copies of scratch material
 *.bak
+*.bak-*
 *.log
 __pycache__/
+# wrangler local state (never deployed, never committed)
+.wrangler/

@@ -26,6 +26,7 @@
  {"@type":"ListItem","position":2,"name":"Work","item":"https://quietmason.com/work/"},
  {"@type":"ListItem","position":3,"name":"A store that had to be cheap to run","item":"https://quietmason.com/work/storefront/"}]}
 </script>
+<!-- h2-question-pass 20261020 -->
 </head>
 <body>
 <header>
@@ -49,6 +50,7 @@
     <div class="wrap page-head">
     <div class="eyebrow accent">STOREFRONT · case notes</div>
     <h1>A store that had to be cheap to run</h1>
+<div class="answer" data-answer-block style="border-left:3px solid var(--ink,#10222f);padding:.6rem 0 .6rem 1rem;margin:1.2rem 0"><p style="margin:0"><strong>Short answer:</strong> A product business needed an English storefront for overseas buyers, and the constraint that shaped everything was running cost: no monthly platform fee, no per-app charges, no dependency on a service that can reprice or disappear. The result is a static storefront with the catalogue in data files, deployed to an edge host, with the order form posting to an endpoint the client owns. Handover covered the build and the data format.</p><p style="margin:.5rem 0 0;font-size:13px;color:#66727e">Checked on 2026-10-20</p></div>
     <p class="lede">A product business needed an English storefront for overseas buyers. The requirement that shaped everything else was cost: no monthly platform subscription, no per-app fees, and no dependency on a service that could change its pricing or disappear.</p>
     </div>
   </div>
@@ -57,7 +59,8 @@
     <div class="wrap grid grid-2">
       <div>
         <div class="eyebrow">Constraints</div>
-        <h2 style="margin-top:10px">What shaped the work</h2>
+        <h2 style="margin-top:10px">What shaped the work?</h2>
+<p class="lede" style="margin-top:12px">One constraint shaped everything else: running cost. No monthly platform fee, no per-app charges, and no dependency on a service that could reprice or vanish. That is why the build is static pages plus a data file.</p>
         <ul class="clean" style="margin-top:16px"><li>One data file had to be the source of truth for the catalog — pricing and copy edited in one place.</li>
 <li>Orders had to reach a human immediately, on a channel that already existed: email.</li>
 <li>Everything that previously ranked had to keep working through the move: URL map, redirects, structured data.</li>
@@ -65,7 +68,7 @@
       </div>
       <div>
         <div class="eyebrow">Stack</div>
-        <h2 style="margin-top:10px">What it runs on</h2>
+        <h2 style="margin-top:10px">What does it run on?</h2>
         <p class="lede" style="margin-top:16px">Static generation · PHP for forms and order capture · structured data</p>
         <div class="case-metas" style="border:1px solid var(--line-2);border-radius:12px;margin-top:18px">
           <div><b>Platform dependency</b>none</div>
@@ -77,7 +80,8 @@
 
   <section class="band">
     <div class="wrap">
-      <div class="section-head"><div class="eyebrow">Build</div><h2>What we actually built</h2></div>
+      <div class="section-head"><div class="eyebrow">Build</div><h2>What did we actually build?</h2>
+<p class="lede" style="margin-top:12px">The storefront is static pages plus a data file, deployed to an edge host, with the order form posting to an endpoint the client owns. What follows is the build, the constraint that shaped it, and what it deliberately does not do.</p></div>
       <ul class="clean" style="margin-top:22px"><li>Catalog and product pages generated from a single data file, so a price change is one line, not thirty pages.</li>
 <li>Order capture posts to a server-rendered endpoint and sends a structured notification email — no third-party checkout fee.</li>
 <li>Static output on cheap hosting, with PHP only where a form needs a server.</li>

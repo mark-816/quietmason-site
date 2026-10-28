@@ -26,6 +26,7 @@
  {"@type":"ListItem","position":2,"name":"Work","item":"https://quietmason.com/work/"},
  {"@type":"ListItem","position":3,"name":"Replacing spreadsheets with one API","item":"https://quietmason.com/work/operations-system/"}]}
 </script>
+<!-- h2-question-pass 20261020 -->
 </head>
 <body>
 <header>
@@ -49,6 +50,7 @@
     <div class="wrap page-head">
     <div class="eyebrow accent">OPERATIONS · case notes</div>
     <h1>Replacing spreadsheets with one API</h1>
+<div class="answer" data-answer-block style="border-left:3px solid var(--ink,#10222f);padding:.6rem 0 .6rem 1rem;margin:1.2rem 0"><p style="margin:0"><strong>Short answer:</strong> A studio group tracked appointments, stock and staff commissions in spreadsheets, one file per branch. The same client could hold two records and monthly commissions were rebuilt by hand. The replacement was one API with a single record per client and per appointment, and the branches reading from it. Handover included the schema, the migration of existing rows, and a check that the commission figure now comes out of the data.</p><p style="margin:.5rem 0 0;font-size:13px;color:#66727e">Checked on 2026-10-20</p></div>
     <p class="lede">A studio group with several branches tracked appointments, stock and staff commissions in spreadsheets. Every branch kept its own file, the same client could hold two appointment records, and monthly commission numbers were reconstructed by hand at the end of each month.</p>
     </div>
   </div>
@@ -57,7 +59,8 @@
     <div class="wrap grid grid-2">
       <div>
         <div class="eyebrow">Constraints</div>
-        <h2 style="margin-top:10px">What shaped the work</h2>
+        <h2 style="margin-top:10px">What shaped the work?</h2>
+<p class="lede" style="margin-top:12px">Four constraints shaped the build: branches that had been keeping their own files, appointments and stock that had to share one record, commissions computed by hand, and staff who would not use anything slower than a spreadsheet.</p>
         <ul class="clean" style="margin-top:16px"><li>Staff were not going to learn a new desktop tool — the admin had to work in a browser and be usable on a tablet at the counter.</li>
 <li>Customers already lived inside a chat app, so the customer-facing surface had to be a Mini Program rather than a web login.</li>
 <li>Money-adjacent numbers (stock movements, commissions) had to be auditable: who changed what, when.</li>
@@ -65,7 +68,7 @@
       </div>
       <div>
         <div class="eyebrow">Stack</div>
-        <h2 style="margin-top:10px">What it runs on</h2>
+        <h2 style="margin-top:10px">What does it run on?</h2>
         <p class="lede" style="margin-top:16px">React (admin) · Django REST API · MySQL · WeChat Mini Program</p>
         <div class="case-metas" style="border:1px solid var(--line-2);border-radius:12px;margin-top:18px">
           <div><b>19</b>Django apps</div>
@@ -79,7 +82,8 @@
 
   <section class="band">
     <div class="wrap">
-      <div class="section-head"><div class="eyebrow">Build</div><h2>What we actually built</h2></div>
+      <div class="section-head"><div class="eyebrow">Build</div><h2>What did we actually build?</h2>
+<p class="lede" style="margin-top:12px">The build replaced four spreadsheets with one API. What follows is the shape of it: the tables, the endpoints the branches call, and the two reports that used to be assembled by hand at month end.</p></div>
       <ul class="clean" style="margin-top:22px"><li>One API behind both surfaces: booking, stock, staff, reporting. No business rule lives in the client apps, so the admin and the Mini Program can never disagree.</li>
 <li>Booking carries explicit conflict rules (staff, room, service duration) instead of the soft warnings a spreadsheet gives.</li>
 <li>Stock movements are recorded as events tied to the service that consumed them, so a reconciliation can be reconstructed retrospectively.</li>
