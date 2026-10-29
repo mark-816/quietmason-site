@@ -310,7 +310,9 @@ export function checksFor({ pageUrl, res, html, parsed, robots, sitemap, sitemap
   const locs = typeof sitemapLocs === 'number' ? sitemapLocs
     : (sitemap && sitemap.status === 200 ? (sitemap.text.match(/<loc>/gi) || []).length : 0);
   out.push(P('sitemap', 'A sitemap', locs ? 'pass' : 'warn',
-    locs ? (sitemapChildren ? `${locs} URLs across ${sitemapChildren} child sitemaps of a sitemap index${sitemapChildren >= SITEMAP_MAX_CHILDREN ? ` (first ${SITEMAP_MAX_CHILDREN} read)` : ''}.` : `${locs} URLs in /sitemap.xml.`)
+    locs ? (sitemapChildren
+      ? `${locs} URL${locs === 1 ? '' : 's'} across ${sitemapChildren} child sitemap${sitemapChildren === 1 ? '' : 's'} of a sitemap index${sitemapChildren >= SITEMAP_MAX_CHILDREN ? ` (first ${SITEMAP_MAX_CHILDREN} read)` : ''}.`
+      : `${locs} URL${locs === 1 ? '' : 's'} in /sitemap.xml.`)
       : sitemap && sitemap.status && sitemap.status !== 404 ? `No readable /sitemap.xml (HTTP ${sitemap.status}).`
         : 'No usable /sitemap.xml.',
     'Publish /sitemap.xml with every public URL and list it in robots.txt.'));
