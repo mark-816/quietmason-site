@@ -50,7 +50,7 @@
     <div class="wrap page-head">
     <div class="eyebrow accent">STOREFRONT · case notes</div>
     <h1>A store that had to be cheap to run</h1>
-<div class="answer" data-answer-block style="border-left:3px solid var(--ink,#10222f);padding:.6rem 0 .6rem 1rem;margin:1.2rem 0"><p style="margin:0"><strong>Short answer:</strong> A product business needed an English storefront for overseas buyers, and the constraint that shaped everything was running cost: no monthly platform fee, no per-app charges, no dependency on a service that can reprice or disappear. The result is a static storefront with the catalogue in data files, deployed to an edge host, with the order form posting to an endpoint the client owns. Handover covered the build and the data format.</p><p style="margin:.5rem 0 0;font-size:13px;color:#66727e">Checked on 2026-10-20</p></div>
+<div class="answer" data-answer-block style="border-left:3px solid var(--ink,#10222f);padding:.6rem 0 .6rem 1rem;margin:1.2rem 0"><p style="margin:0"><strong>Short answer:</strong> A product business needed an English storefront for overseas buyers, and the constraint that shaped everything was running cost: no monthly platform fee, no per-app charges, no dependency on a service that can reprice or disappear. The result is a static storefront with the catalog in data files, deployed to an edge host, with the order form posting to an endpoint the client owns. Handover covered the build and the data format.</p><p style="margin:.5rem 0 0;font-size:13px;color:#66727e">Checked on 2026-10-20</p></div>
     <p class="lede">A product business needed an English storefront for overseas buyers. The requirement that shaped everything else was cost: no monthly platform subscription, no per-app fees, and no dependency on a service that could change its pricing or disappear.</p>
     </div>
   </div>
@@ -73,6 +73,9 @@
         <div class="case-metas" style="border:1px solid var(--line-2);border-radius:12px;margin-top:18px">
           <div><b>Platform dependency</b>none</div>
           <div><b>In production</b>still maintained</div>
+          <div><b>Status</b>live, maintained by us</div>
+          <div><b>Delivered</b>source, run sheet, credentials</div>
+          <div><b>Verify</b>code walk-through on a call</div>
         </div>
       </div>
     </div>
@@ -81,7 +84,7 @@
   <section class="band">
     <div class="wrap">
       <div class="section-head"><div class="eyebrow">Build</div><h2>What did we actually build?</h2>
-<p class="lede" style="margin-top:12px">The storefront is static pages plus a data file, deployed to an edge host, with the order form posting to an endpoint the client owns. What follows is the build, the constraint that shaped it, and what it deliberately does not do.</p></div>
+<p class="lede" style="margin-top:12px">The storefront is static pages plus a data file, deployed to an edge host, with the order form posting to an endpoint the client owns. What follows is the build, the constraint that shaped it, and what it does not do.</p></div>
       <ul class="clean" style="margin-top:22px"><li>Catalog and product pages generated from a single data file, so a price change is one line, not thirty pages.</li>
 <li>Order capture posts to a server-rendered endpoint and sends a structured notification email — no third-party checkout fee.</li>
 <li>Static output on cheap hosting, with PHP only where a form needs a server.</li>
@@ -129,7 +132,8 @@
     </div>
     <div class="fnav">
       <a href="/services/">Services</a><a href="/capabilities/">Capabilities</a><a href="/work/">Work</a>
-      <a href="/trust/">Trust</a><a href="/pricing/">Pricing</a><a href="/contact/">Contact</a>
+      <a href="/trust/">Trust</a><a href="/pricing/">Pricing</a>
+      <a href="/seo-check/">Free SEO check</a><a href="/contact/">Contact</a>
     </div>
   </div>
 </footer>

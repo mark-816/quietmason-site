@@ -8,6 +8,7 @@
 - Technical SEO: crawl/index diagnostics from Search Console, structured data, internal linking, Core Web Vitals
 - AI search visibility: entity consistency, markup that matches the page, pages written to be quotable
 - Websites and fixes: storefronts, landing pages, migrations, performance work (plain HTML/PHP by default)
+- Care plan: monthly monitoring, a one-page report and a bank of change hours for a site that is already live
 
 ## Published price ranges (USD, from)
 - Single automation workflow: $250-1,000 · 1-3 days · one job on a schedule, with retries and an alert when it breaks
@@ -44,6 +45,9 @@ who owns the destination platform, and immovable deadlines.
 
 ## Key pages
 - Services and ranges: https://quietmason.com/services/
+- Site migration and platform escape: https://quietmason.com/services/migration/
+- Care plan (monthly maintenance): https://quietmason.com/services/maintenance/
+- Free 12-point SEO check, no email required: https://quietmason.com/seo-check/
 - Capabilities and stack: https://quietmason.com/capabilities/
 - Selected work: https://quietmason.com/work/
 - Published price ranges: https://quietmason.com/pricing/

@@ -41,6 +41,7 @@
       var email = form.email.value.trim();
       var message = form.message.value.trim();
       var topic = form.topic ? form.topic.value : 'other';
+      var budget = form.budget ? form.budget.value : '';
       var trap = form.website ? form.website.value : '';
 
       form.email.classList.toggle('form-error', !validEmail(email));
@@ -49,6 +50,9 @@
         setStatus('err', 'Please add a working email and a sentence or two about the task.');
         return;
       }
+      // The band the sender picked travels with the message: no extra field in the API, and the
+      // enquiry that lands in the inbox and in the database both show it.
+      if (budget) message = message + '\n\nBudget band: ' + budget;
       if (submit) submit.disabled = true;
       setStatus('busy', 'Sending…');
       post({ email: email, topic: topic, message: message, website: trap, source: location.pathname })

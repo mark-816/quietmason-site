@@ -79,6 +79,24 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://quietmason.com/services/migration/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://quietmason.com/services/maintenance/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://quietmason.com/seo-check/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://quietmason.com/work/operations-system/</loc>
     <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
