@@ -437,3 +437,14 @@ td .rowdef{display:block;margin-top:6px;font-weight:400;font-size:14px;line-heig
   .scan-kbd{display:none}
 }
 @media (prefers-reduced-motion:reduce){.scan-form{transition:none}}
+
+/* feedback for the free-check form: every state must be visible on the dark band */
+.scan-notice{font-size:14.5px;font-weight:600;margin:2px 0 0}
+.scan-notice.busy{color:#cfd8e3}
+.scan-notice.err{color:#ffb4b4}
+.scan-notice.ask{color:#ffd08a}
+.scan-form.is-error{border-color:#f6c343;
+  box-shadow:0 0 0 5px rgba(246,195,67,.30),0 26px 50px -24px rgba(0,0,0,.75)}
+@keyframes scanShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.scan-form.is-shake{animation:scanShake .42s var(--ease) 1}
+@media (prefers-reduced-motion:reduce){.scan-form.is-shake{animation:none}}

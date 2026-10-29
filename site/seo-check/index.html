@@ -51,7 +51,7 @@
       <h1>What the search engines see on your site</h1>
       <p class="lede">Paste one URL. In a few seconds you get twelve checks on the page you actually serve, including the ones nobody looks at: whether AI crawlers are blocked, whether there is an answer block for an assistant to quote, and whether the page carries a date a buyer can trust.</p>
       <label for="scanUrl" class="scan-label">Website address</label>
-      <form id="scanForm" class="scan-form" autocomplete="off">
+      <form id="scanForm" class="scan-form" autocomplete="off" novalidate>
         <input id="scanUrl" name="url" type="text" inputmode="url" enterkeyhint="go" placeholder="yourdomain.com" spellcheck="false" autocapitalize="off" autocorrect="off" aria-describedby="scanNote" required>
         <span class="scan-kbd" aria-hidden="true">Enter &#8629;</span>
         <button class="btn btn-primary" type="submit" id="scanBtn">Run the 12 checks</button>
@@ -194,19 +194,50 @@
     else form.dispatchEvent(new Event('submit', { cancelable: true }));
   });
 
+  /* Messages sit on the dark hero, so they need light colours: the old #555 and #8c1d1d
+     text was invisible there, which made a slow check look like a dead button. */
+  function node(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  function notice(text, tone) {
+    out.innerHTML = '';
+    var n = node('div', 'scan-notice ' + (tone || 'busy'), text);
+    out.appendChild(n);
+    return n;
+  }
+
+  function askAgain(text) {
+    notice(text, 'ask');
+    form.classList.add('is-error');
+    input.focus();
+    form.classList.remove('is-shake');
+    void form.offsetWidth;
+    form.classList.add('is-shake');
+    setTimeout(function () { form.classList.remove('is-shake'); }, 460);
+    var clear = function () { form.classList.remove('is-error'); input.removeEventListener('input', clear); };
+    input.addEventListener('input', clear);
+  }
+
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();
     var url = input.value.trim();
-    if (!url) return;
-    btn.disabled = true; out.innerHTML = '';
-    out.appendChild(el('div', 'color:#555;font-size:14px', 'Reading the page…'));
+    var host = url.replace(/^https?:\/\//i, '').split('/')[0];
+    if (!url) { askAgain('Type a domain first, for example yourdomain.com.'); return; }
+    if (host.indexOf('.') === -1) { askAgain('That is not a domain. Try yourdomain.com or https://yourdomain.com.'); return; }
+    form.classList.remove('is-error');
+    btn.disabled = true;
+    notice('Reading the page…', 'busy');
     fetch('/api/check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: url }) })
       .then(function (r) { return r.json(); })
       .then(function (j) {
-        if (!j.ok) { out.innerHTML = ''; out.appendChild(el('div', 'color:#8c1d1d;font-size:14px', j.message || 'That address could not be checked.')); return; }
+        if (!j.ok) { notice(j.message || 'That address could not be checked. It may block automated requests, or the address may be wrong.', 'err'); return; }
         render(j);
       })
-      .catch(function () { out.innerHTML = ''; out.appendChild(el('div', 'color:#8c1d1d;font-size:14px', 'The check could not run just now. Try again in a moment.')); })
+      .catch(function () { notice('The check could not run just now. Try again in a moment.', 'err'); })
       .then(function () { btn.disabled = false; });
   });
 })();
