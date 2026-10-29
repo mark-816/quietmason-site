@@ -50,14 +50,15 @@
       <div class="eyebrow accent">Free check</div>
       <h1>What the search engines see on your site</h1>
       <p class="lede">Paste one URL. In a few seconds you get twelve checks on the page you actually serve, including the ones nobody looks at: whether AI crawlers are blocked, whether there is an answer block for an assistant to quote, and whether the page carries a date a buyer can trust.</p>
-      <div class="answer"><b>Free SEO and GEO check.</b> The tool fetches your page once and reads the HTML: title, description, H1, canonical, structured data, the first real paragraph, how many headings are questions, the freshness date, robots.txt access for AI crawlers, llms.txt and sitemap. Twelve checks, no account, no email. It reads one page and says what it sees; it does not run a browser, so it cannot measure speed. The full report covers up to five pages and arrives by email.</div>
-
+      <label for="scanUrl" class="scan-label">Website address</label>
       <form id="scanForm" class="scan-form" autocomplete="off">
-        <label for="scanUrl" class="sr-only">Website address</label>
-        <input id="scanUrl" name="url" type="text" inputmode="url" placeholder="yourdomain.com" spellcheck="false" required>
-        <button class="btn btn-primary" type="submit" id="scanBtn">Check the page</button>
+        <input id="scanUrl" name="url" type="text" inputmode="url" enterkeyhint="go" placeholder="yourdomain.com" spellcheck="false" autocapitalize="off" autocorrect="off" aria-describedby="scanNote" required>
+        <span class="scan-kbd" aria-hidden="true">Enter &#8629;</span>
+        <button class="btn btn-primary" type="submit" id="scanBtn">Run the 12 checks</button>
       </form>
-      <p class="muted" id="scanNote" style="margin-top:10px">No sign-up. We read the public page once and keep no copy; results are cached for six hours by URL so a repeat check costs nothing.</p>
+      <p class="scan-note" id="scanNote">No sign-up. We read the public page once and keep no copy, and results are cached for six hours by URL so a repeat check costs nothing. <button type="button" class="scan-try" id="scanTry">Check this site as an example</button></p>
+
+      <div class="answer" style="margin-top:26px"><b>Free SEO and GEO check.</b> The tool fetches your page once and reads the HTML: title, description, H1, canonical, structured data, the first real paragraph, how many headings are questions, the freshness date, robots.txt access for AI crawlers, llms.txt and sitemap. Twelve checks, no account, no email. It reads one page and says what it sees; it does not run a browser, so it cannot measure speed. The full report covers up to five pages and arrives by email.</div>
       <div id="scanOut" aria-live="polite" style="margin-top:18px"></div>
     </div>
   </div>
@@ -125,6 +126,7 @@
   var input = document.getElementById('scanUrl');
   var out = document.getElementById('scanOut');
   var btn = document.getElementById('scanBtn');
+  var tryBtn = document.getElementById('scanTry');
   var HTML = { pass: ['#e8f5ec', '#1c6b35'], warn: ['#fff4e0', '#8a5a00'], fail: ['#fde8e8', '#8c1d1d'] };
 
   function el(tag, css, text) {
@@ -185,6 +187,12 @@
     card.appendChild(foot);
     out.appendChild(card);
   }
+
+  if (tryBtn) tryBtn.addEventListener('click', function () {
+    input.value = 'quietmason.com';
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event('submit', { cancelable: true }));
+  });
 
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();

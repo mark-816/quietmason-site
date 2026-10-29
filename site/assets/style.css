@@ -403,3 +403,37 @@ td .rowdef{display:block;margin-top:6px;font-weight:400;font-size:14px;line-heig
 .hero .answer{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);border-left-color:var(--accent-2);color:var(--dark-ink-2)}
 .answer b{color:var(--ink)}
 .hero .answer b{color:#fff}
+
+/* ==========================================================================
+   Free-check hero form (/seo-check/)
+   The one control on this page that must not be missed: a white slab on the
+   dark band, 2px border, 60px tall, with the label above it at full contrast.
+   ========================================================================== */
+.scan-label{display:block;margin-top:30px;margin-bottom:0;font-size:12.5px;
+  letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:#fff}
+.scan-form{display:flex;align-items:center;gap:10px;margin-top:10px;padding:9px;
+  max-width:760px;background:#fff;border:2px solid #fff;border-radius:16px;
+  box-shadow:0 26px 50px -24px rgba(0,0,0,.75),0 4px 12px rgba(0,0,0,.28);
+  transition:border-color .25s var(--ease),box-shadow .25s var(--ease)}
+.scan-form:hover{box-shadow:0 28px 54px -24px rgba(0,0,0,.8),0 5px 14px rgba(0,0,0,.3)}
+.scan-form:focus-within{border-color:var(--accent);
+  box-shadow:0 0 0 5px rgba(42,91,215,.32),0 26px 50px -24px rgba(0,0,0,.7)}
+.scan-form input{flex:1 1 auto;min-width:0;border:0;outline:none;background:transparent;
+  padding:15px 10px 15px 16px;min-height:60px;font:inherit;
+  font-size:clamp(17px,2.1vw,20px);font-weight:560;color:var(--ink);letter-spacing:-.01em}
+.scan-form input::placeholder{color:#98a1ab;font-weight:450;letter-spacing:0}
+.scan-form .btn{flex:0 0 auto;min-height:60px;padding:0 26px;font-size:16.5px;border-radius:11px}
+.scan-kbd{flex:none;margin-right:4px;padding:3px 8px;border:1px solid var(--line);border-radius:7px;
+  font-size:11.5px;font-weight:650;color:#98a1ab;letter-spacing:.03em}
+.scan-note{margin-top:14px;font-size:13.5px;color:rgba(255,255,255,.66);max-width:72ch}
+.scan-try{margin-top:4px;padding:0;border:0;background:none;cursor:pointer;font:inherit;
+  font-size:13.5px;font-weight:600;color:var(--accent-2);text-decoration:underline;
+  text-decoration-thickness:1px;text-underline-offset:3px}
+.scan-try:hover{color:#fff}
+@media (max-width:640px){
+  .scan-form{flex-direction:column;align-items:stretch;gap:8px;padding:10px}
+  .scan-form input{min-height:52px;padding:12px;font-size:17px}
+  .scan-form .btn{width:100%;justify-content:center;min-height:52px}
+  .scan-kbd{display:none}
+}
+@media (prefers-reduced-motion:reduce){.scan-form{transition:none}}
