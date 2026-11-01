@@ -6,9 +6,9 @@
 ## What we do
 - Automation and data pipelines: collection, cleaning, scheduling, alerts, integrations (n8n, Make, Zapier, direct APIs)
 - Technical SEO: crawl/index diagnostics from Search Console, structured data, internal linking, Core Web Vitals
-- AI search visibility: entity consistency, markup that matches the page, pages written to be quotable
+- AI search visibility: entity consistency, markup that matches the page, pages written to be quotable. Bought as part of a technical SEO audit (from $400), as fixes scoped per finding, or as monitoring inside the care plan
 - Websites and fixes: storefronts, landing pages, migrations, performance work (plain HTML/PHP by default)
-- Care plan: monthly monitoring, a one-page report and a bank of change hours for a site that is already live
+- Care plan: monthly monitoring, a one-page report, AI crawler activity, a monthly re-run of the buyer questions and a bank of change hours for a site that is already live
 
 ## Published price ranges (USD, from)
 - Single automation workflow: $250-1,000 · 1-3 days · one job on a schedule, with retries and an alert when it breaks
@@ -19,7 +19,7 @@
 - Landing page: from $300 · 2-4 days · one page: offer, proof, price, form, plain HTML
 - Store build: from $900 · 1-2 weeks · small catalog with orders, payments and admin
 - Migration or speed work: from $500 · 2-6 days · move hosts without losing URLs, fix what is slow
-- Care plan: $90-350 per month · monitoring, monthly report, 4h/month of changes · cancelable with 30 days notice
+- Care plan: $90-350 per month · monitoring, AI crawler activity, a monthly buyer-question re-run, monthly report, 4h/month of changes · cancelable with 30 days notice
 
 ## How to commission work here
 Send these eight lines plus one sample (a URL or an export): the outcome; who does it today and how often; where the

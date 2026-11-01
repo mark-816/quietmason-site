@@ -27,7 +27,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://quietmason.com/"},{"@type":"ListItem","position":2,"name":"Services","item":"https://quietmason.com/services/"},{"@type":"ListItem","position":3,"name":"Care plan","item":"https://quietmason.com/services/maintenance/"}]}
 </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What does the care plan actually watch?", "acceptedAnswer": {"@type": "Answer", "text": "Uptime of the pages that matter, scheduled runs and their exit status, error logs, form submissions, and the things that silently change underneath a site: certificate expiry, a feed that changed shape, a platform deprecating something the site depends on. You hear about breakage from us, not from a customer."}}, {"@type": "Question", "name": "What counts as a change under the $350 tier?", "acceptedAnswer": {"@type": "Answer", "text": "Four hours a month of edits and small additions on the site we maintain: new text, a page, a price, a form field, a template tweak. Unused hours roll over for one month. Work beyond that is quoted as its own scope, in writing, before it starts."}}, {"@type": "Question", "name": "Is there a lock-in?", "acceptedAnswer": {"@type": "Answer", "text": "No. Both tiers are month to month and cancel with 30 days notice. Nothing renews silently and no plan is required to get a project quoted or built."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What does the care plan actually watch?", "acceptedAnswer": {"@type": "Answer", "text": "Uptime of the pages that matter, scheduled runs and their exit status, error logs, form submissions, what the AI crawlers fetch and how many pages they take, and the things that silently change underneath a site: certificate expiry, a feed that changed shape, a platform deprecating something the site depends on. You hear about breakage from us, not from a customer."}}, {"@type": "Question", "name": "What counts as a change under the $350 tier?", "acceptedAnswer": {"@type": "Answer", "text": "Four hours a month of edits and small additions on the site we maintain: new text, a page, a price, a form field, a template tweak. Unused hours roll over for one month. Work beyond that is quoted as its own scope, in writing, before it starts."}}, {"@type": "Question", "name": "Is there a lock-in?", "acceptedAnswer": {"@type": "Answer", "text": "No. Both tiers are month to month and cancel with 30 days notice. Nothing renews silently and no plan is required to get a project quoted or built."}}]}</script>
 </head>
 <body>
 <header>
@@ -52,7 +52,7 @@
     <div class="eyebrow accent">Care plan &amp; maintenance</div>
     <h1>A care plan for the site you already have</h1>
     <p class="lede">Most sites are not broken. They drift: a feed changes shape, a certificate expires, a form stops delivering without an error. A plan turns that into a known monthly number instead of an emergency.</p>
-    <div class="answer"><b>Care plan.</b> A fixed monthly for keeping a live site from breaking without anyone noticing. The $90 tier watches uptime, scheduled runs, error logs and form deliveries, and sends a one-page report each month. The $350 tier adds four hours of changes and fixes caused by third-party breakage. Both are cancelable with 30 days notice, and neither is required to get a project built.</div>
+    <div class="answer"><b>Care plan.</b> A fixed monthly for keeping a live site from breaking without anyone noticing. The $90 tier watches uptime, scheduled runs, error logs, form deliveries and what the AI crawlers actually fetch, and sends a one-page report each month. The $350 tier adds four hours of changes, fixes caused by third-party breakage, and a monthly re-run of your buyers' questions against the answer engines. Both are cancelable with 30 days notice, and neither is required to get a project built.</div>
     <div class="cta">
       <a class="btn btn-primary" href="/contact/">Ask about the plan</a>
       <a class="btn btn-ghost" href="/pricing/#care">See both tiers</a>
@@ -69,6 +69,8 @@
         <div class="card"><h3>Scheduled work</h3><p>Every run we built, with its exit status, duration and last successful time. Silence is a failure state, not a pass.</p></div>
         <div class="card"><h3>Forms and orders</h3><p>A test submission once a day, so a broken mail path is found by us rather than by a customer who assumed they had been ignored.</p></div>
         <div class="card"><h3>The slow decay</h3><p>Certificate expiry, dependency updates that change behavior, feeds that changed shape, search coverage that dropped after someone else's deploy.</p></div>
+        <div class="card"><h3>Answer engines</h3><p>Which AI crawlers actually fetch your pages, how many pages they take, and whether an assistant still describes you the same way it did last month. The crawl numbers come from the logs, not from a tool's estimate.</p></div>
+        <div class="card"><h3>What the plan does not watch</h3><p>No ranking guarantees and no promise about what an assistant will say about you. We can show what was crawled, what was retrieved and who was named when we asked; nobody controls the answer itself.</p></div>
       </div>
     </div>
   </section>
@@ -88,6 +90,7 @@
         <h3>What is in the $350 tier that is not in the $90 one?</h3>
         <ul class="clean" style="margin-top:14px">
           <li>Four hours of changes a month, unused hours rolling over one month</li>
+          <li>A monthly re-run of your buyers' questions against the answer engines, with who was named</li>
           <li>A place ahead of new projects in the queue</li>
           <li>Breakage caused by a third party fixed without a new scope</li>
           <li>A quarterly review with a written list of what to do next</li>
@@ -114,7 +117,7 @@
       <div class="section-head"><div class="eyebrow">Questions</div><h2>Common questions</h2>
       <p class="lede" style="margin-top:12px">What people ask before putting a site on a monthly plan, including the one about getting out of it.</p></div>
       <ul class="clean" style="margin-top:18px;max-width:76ch">
-        <li><b>What does the care plan actually watch?</b> Uptime of the pages that matter, scheduled runs and their exit status, error logs, form submissions, and the things that silently change underneath a site: certificate expiry, a feed that changed shape, a platform deprecating something the site depends on. You hear about breakage from us, not from a customer.</li>
+        <li><b>What does the care plan actually watch?</b> Uptime of the pages that matter, scheduled runs and their exit status, error logs, form submissions, what the AI crawlers fetch and how many pages they take, and the things that silently change underneath a site: certificate expiry, a feed that changed shape, a platform deprecating something the site depends on. You hear about breakage from us, not from a customer.</li>
         <li><b>What counts as a change under the $350 tier?</b> Four hours a month of edits and small additions on the site we maintain: new text, a page, a price, a form field, a template tweak. Unused hours roll over for one month. Work beyond that is quoted as its own scope, in writing, before it starts.</li>
         <li><b>Is there a lock-in?</b> No. Both tiers are month to month and cancel with 30 days notice. Nothing renews silently and no plan is required to get a project quoted or built.</li>
       </ul>
