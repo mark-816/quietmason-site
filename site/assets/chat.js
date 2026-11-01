@@ -8,6 +8,8 @@ if(global.__chatWidgetMounted) return;
 global.__chatWidgetMounted = true;
 
 var DEFAULTS = {
+  idleMs: (typeof window !== 'undefined' && window.QM_CHAT_IDLE_MS) || 30 * 60 * 1000,
+  idleWarnMs: (typeof window !== 'undefined' && window.QM_CHAT_IDLE_WARN_MS) || 27 * 60 * 1000,
   faq: {
     "hello hi hey": "Hello. Ask about a project, a price, or how we work.",
     "how much price pricing cost quote budget estimate fee": "Published ranges: single automation $250–1,000 · scraping or enrichment pipeline $700–4,600 · multi-step integration $1,000–3,000 · technical SEO audit from $400 · landing page from $300 · store from $900. A quote is one fixed number for a written scope.",
@@ -95,9 +97,10 @@ ChatWidget.prototype = {
     var panel = _el('div', {
       id: 'ai-panel',
       css: {
-        display:'none', position:'fixed',
+        display:'none', position:'fixed', flexDirection:'column',
         bottom:c.position.bottom+'px', right:c.position.right+'px',
-        zIndex:9999, width:360, maxWidth:'calc(100vw - 48px)',
+        zIndex:9999, width:384, maxWidth:'calc(100vw - 32px)',
+        height:'min(620px, calc(100dvh - 7rem))',
         background:'#fff', borderRadius:16, overflow:'hidden',
         boxShadow:'0 8px 40px rgba(0,0,0,0.15)'
       }
@@ -115,12 +118,12 @@ ChatWidget.prototype = {
       '<span style="font-size:22px">&#9679;</span>' +
       '<span style="font-weight:700;font-size:14px">'+c.title+'</span>' +
       '<span style="font-size:10px;opacity:.7">'+c.status+'</span></div>' +
-      '<span id="ai-close" style="font-size:20px;line-height:1;opacity:.8;cursor:pointer">✕</span>';
+      '<span id="ai-close" role="button" title="Minimize the chat" aria-label="Minimize chat" style="font-size:22px;line-height:1;opacity:.8;cursor:pointer">&#8964;</span>';
 
     // Messages
     var msgs = _el('div', {
       id: 'ai-msgs',
-      css: { maxHeight:280, minHeight:60, overflowY:'auto', padding:12, background:'#fafafa' }
+      css: { flex:'1 1 auto', minHeight:60, overflowY:'auto', padding:12, background:'#fafafa' }
     });
     msgs.innerHTML = '<div style="display:flex;gap:6px;align-items:flex-start">' +
       '<span style="font-size:20px;flex-shrink:0">&#9679;</span>' +
@@ -165,9 +168,13 @@ ChatWidget.prototype = {
   },
 
   open: function(){
-    this._elements.panel.style.display = 'block';
+    this._elements.panel.style.display = 'flex';
     this._elements.trigger.style.display = 'none';
     this._open = true;
+    if (!this._greetHtml) this._greetHtml = this._elements.msgs.innerHTML;
+    var stale = this._lastAt && (Date.now() - this._lastAt >= this.cfg.idleMs);
+    if (stale || this._ended) this._resetThread();
+    this._touch();
   },
 
   close: function(){
@@ -180,11 +187,61 @@ ChatWidget.prototype = {
     this._open ? this.close() : this.open();
   },
 
+  // ── Idle handling: warn, then end the conversation ──────────────
+  _touch: function(){
+    var self = this;
+    this._lastAt = Date.now();
+    this._idleWarned = false;
+    if (this._idleTimer) clearInterval(this._idleTimer);
+    var tick = Math.min(20000, Math.max(1000, Math.round(this.cfg.idleMs / 10)));
+    this._idleTimer = setInterval(function(){ self._checkIdle(); }, tick);
+  },
+
+  _checkIdle: function(){
+    if (!this._lastAt) return;
+    var idle = Date.now() - this._lastAt;
+    if (idle >= this.cfg.idleMs) { this._endSession(); return; }
+    if (!this._idleWarned && idle >= this.cfg.idleWarnMs) {
+      this._idleWarned = true;
+      var m = Math.max(1, Math.round((this.cfg.idleMs - idle) / 60000));
+      this._appendSystem('This chat closes in ' + (m === 1 ? '1 minute' : m + ' minutes') + ' unless you reply.');
+    }
+  },
+
+  _endSession: function(){
+    if (this._idleTimer) { clearInterval(this._idleTimer); this._idleTimer = null; }
+    this._lastAt = 0;
+    this._ended = true;
+    this._endedNote = Math.round(this.cfg.idleMs / 60000);
+    this.close();
+  },
+
+  _appendSystem: function(text){
+    var msgs = this._elements.msgs;
+    var d = document.createElement('div');
+    d.style.cssText = 'margin:10px 0;text-align:center;font-size:11px;color:#8a8a8a;line-height:1.6';
+    d.textContent = text;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+  },
+
+  _resetThread: function(){
+    var msgs = this._elements.msgs;
+    msgs.innerHTML = this._greetHtml || '';
+    this._idleWarned = false;
+    if (this._ended) {
+      this._appendSystem('The previous chat closed after ' + this._endedNote + ' minutes of inactivity.');
+      this._ended = false;
+    }
+    msgs.scrollTop = 0;
+  },
+
   // ── Message logic ───────────────────────────────
   _handleSend: function(){
     var msg = this._elements.input.value.trim();
     if(!msg) return;
     this._appendMessage('user', msg);
+    this._touch();
     this._elements.input.value = '';
     this._showTyping();
     var self = this;
@@ -192,11 +249,13 @@ ChatWidget.prototype = {
     this._callAI(msg).then(function(reply){
       self._removeTyping();
       self._appendMessage('bot', reply);
+      self._touch();
     }).catch(function(){
       // Offline fallback
       setTimeout(function(){
         self._removeTyping();
         self._appendMessage('bot', self._findBestReply(msg));
+        self._touch();
       }, 400);
     });
   },
